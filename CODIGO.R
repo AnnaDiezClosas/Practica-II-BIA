@@ -9,3 +9,5 @@ dfIndicators1 <- dfIndicators
 dfIndicators1 <- dfIndicators1[,-5]
 dfIndicators
 dfIndicators1
+
+#holaaaaaa funciona?
