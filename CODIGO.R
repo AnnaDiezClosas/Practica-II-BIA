@@ -22,7 +22,7 @@ ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar()
 #¿Cómo ha afectado COVID a las multinacionales?
 
 dfTrends <- read.table(file = "OECD-ADIMA-500-Google-trends-monitor.txt", header = TRUE, sep = "\t", dec =",")
-names(dfTrends)[2:76] <- format(as.Date(names(dfTrends)[2:76], format = "X%d.%m.%y"),
-                            format = "%Y-%m-%d")
+dfTrends$Parent.MNE <- as.character(dfTrends$Parent.MNE)
+names(dfTrends)[2:76] <- format(as.Date(names(dfTrends)[2:76], format = "X%d.%m.%Y"), format = "%Y-%m-%d")
 
 dfTrends1 <- dfTrends[c(16,25,38,56,167,177,201,204,186,440),] #ahora todas filas y solo columnas de las empresas que queremos analizar
