@@ -37,7 +37,7 @@ if(!require("dplyr")) {
 ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar()
 
 #¿Dónde pagan impuestos?#
-#Cambiar Not Found por NA
+
 dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
                           header=FALSE)
 
@@ -368,6 +368,48 @@ df <- expand.grid(x=1:10,y=1:10)
 df$WikiTopic <- rep(dfIndexAirbus$WikiTopic, dfIndexAirbus$percent)
 
 ggplot(df,aes(x=x,y=y,fill=WikiTopic))+
+  geom_tile(color = "black", size = 0.5) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
+  coord_equal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
+
+#DENTRO DE AMAZON
+
+dfIndexAmazon<- dfIndex[dfIndex$Parent.MNE=="Amazon.com Inc",]
+
+dfIndexAmazon$percent <- floor(dfIndexAmazon$Weight)
+dfIndexAmazon <- dfIndexAmazon[order(desc(dfIndexAmazon$Weight-dfIndexAmazon$percent)),]
+dfIndexAmazon$percent <- dfIndexAmazon$percent + ifelse(1:nrow(dfIndexAmazon)>100-sum(dfIndexAmazon$percent),0,1) 
+dfIndexAmazon <- dfIndexAmazon[order(desc(dfIndexAmazon$percent)),]
+
+df1 <- expand.grid(x=1:10,y=1:10)
+df1$WikiTopic <- rep(dfIndexAmazon$WikiTopic, dfIndexAmazon$percent)
+
+ggplot(df1,aes(x=x,y=y,fill=WikiTopic))+
+  geom_tile(color = "black", size = 0.5) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
+  coord_equal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
+
+#DENTRO DE APPLE
+
+dfIndexApple<- dfIndex[dfIndex$Parent.MNE=="Apple Inc",]
+
+dfIndexApple$percent <- floor(dfIndexApple$Weight)
+dfIndexApple <- dfIndexApple[order(desc(dfIndexApple$Weight-dfIndexApple$percent)),]
+dfIndexApple$percent <- dfIndexApple$percent + ifelse(1:nrow(dfIndexApple)>100-sum(dfIndexApple$percent),0,1) 
+dfIndexApple <- dfIndexApple[order(desc(dfIndexApple$percent)),]
+
+df2 <- expand.grid(x=1:10,y=1:10)
+df2$WikiTopic <- rep(dfIndexApple$WikiTopic, dfIndexApple$percent)
+
+ggplot(df2,aes(x=x,y=y,fill=WikiTopic))+
   geom_tile(color = "black", size = 0.5) +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
