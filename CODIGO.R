@@ -1,6 +1,6 @@
 #proyecto
 
-dfIndicators <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
+dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
                            header=TRUE, skip = 0, na.strings = "NA")
 
 str(dfIndicators)
@@ -16,9 +16,8 @@ if(!require("ggthemes")) {
 
 ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar()
 
-#¿Dónde pagan impuestos?
+#¿Dónde pagan impuestos?#
 #Cambiar Not Found por NA
-
 
 
 
@@ -312,4 +311,15 @@ WALMART<-ggplot(data=dfWalmart,aes(x=Date))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
   ylab("Index")+ggtitle ("WALMART")
 WALMART
+
+#¿Qué temas o sectores preocupan más dentro de cada EMN? 
+
+dfIndex <- read.table("OECD-ADIMA-500-IndexConstituyents.txt", sep="\t", dec=",", quote = "\"'",
+                           header=TRUE, skip = 0, na.strings = "NA")
+
+dfIndex <- dfIndex[,c(1,4,8)]
+
+#DENTRO DE AIRBUS
+
+dfIndexAirbus<- dfIndex[dfIndex$Parent.MNE=="Airbus SE",]
 
