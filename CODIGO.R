@@ -12,13 +12,58 @@ if(!require("ggthemes")) {
   install.packages("ggthemes")
   library("ggthemes")
 }
+
+
+if(!require("base")) {
+  install.packages("base")
+  library("base")
+}
+
+
 #¿Dónde están las empresas multinacionales?
 
 ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar()
 
 #¿Dónde pagan impuestos?
 #Cambiar Not Found por NA
+dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
+                          header=FALSE)
 
+dfImpuestos1 <- dfImpuestos[,-2:-3:-4:-5:-6:-7:-8:-9:-10:-11]
+
+dfImpuestos1[,-1]<-apply(dfImpuestos1[,-1],2,as.character)
+
+dfImpuestos1_transpose <- data.frame(t(dfImpuestos1[-1]))
+names(dfImpuestos1_transpose)[1]="País"
+
+dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
+                          header=TRUE)
+
+dfImpuestos1 <- dfImpuestos[,-2:-3:-4:-5:-6:-7:-8:-9:-10:-11]
+
+dfImpuestos1[,-1]<-apply(dfImpuestos1[,-1],2,as.character)
+str(dfImpuestos1)
+
+
+output <- vector("double", ncol(dfImpuestos1)) 
+for (i in seq_along(dfImpuestos1)) {             
+  output[[i]] <- count(dfImpuestos1[[i]],vars!="Not Found")
+}
+output
+?count
+
+dfImpuestos1_transpose$"Contaje" <- 
+str(dfImpuestos1)
+
+dfImpuestos1_transpose[1:237,]
+?length
+
+dfImpuestos1_transpose <- lapply(dfImpuestos1_transpose,as.character)
+
+Fila1<-dfImpuestos1_transpose[1, ]
+
+sum(dfImpuestos1_transpose[1,]=="Not Found")
+str(dfImpuestos1_transpose)
 
 
 
