@@ -18,7 +18,19 @@ if(!require("base")) {
   install.packages("base")
   library("base")
 }
+if(!require("scales")) {
+  install.packages("scales")
+  library("scales")
+}
 
+if(!require("tidyverse")) {
+  install.packages("tidyverse")
+  library("tidyverse")
+}
+if(!require("dplyr")) {
+  install.packages("dplyr")
+  library("dplyr")
+}
 
 #¿Dónde están las empresas multinacionales?
 
@@ -36,34 +48,13 @@ dfImpuestos1[,-1]<-apply(dfImpuestos1[,-1],2,as.character)
 dfImpuestos1_transpose <- data.frame(t(dfImpuestos1[-1]))
 names(dfImpuestos1_transpose)[1]="País"
 
-dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
-                          header=TRUE)
-
-dfImpuestos1 <- dfImpuestos[,-2:-3:-4:-5:-6:-7:-8:-9:-10:-11]
-
-dfImpuestos1[,-1]<-apply(dfImpuestos1[,-1],2,as.character)
-str(dfImpuestos1)
+dfImpuestos1_transpose$TotalAnnualReport=rowSums(dfImpuestos1_transpose[-1]=="Annual Reporting")
+dfImpuestos1_transpose$TotalPhysical=rowSums(dfImpuestos1_transpose[-1]=="Physical")
 
 
-output <- vector("double", ncol(dfImpuestos1)) 
-for (i in seq_along(dfImpuestos1)) {             
-  output[[i]] <- count(dfImpuestos1[[i]],vars!="Not Found")
-}
-output
-?count
+ggplot(dfImpuestos1_transpose, aes(x=TotalAnnualReport)) + 
+  geom_histogram(binwidth = 0.1, boundary=0, fill="grey",color="black")
 
-dfImpuestos1_transpose$"Contaje" <- 
-str(dfImpuestos1)
-
-dfImpuestos1_transpose[1:237,]
-?length
-
-dfImpuestos1_transpose <- lapply(dfImpuestos1_transpose,as.character)
-
-Fila1<-dfImpuestos1_transpose[1, ]
-
-sum(dfImpuestos1_transpose[1,]=="Not Found")
-str(dfImpuestos1_transpose)
 
 
 #¿Cómo ha afectado COVID a las multinacionales?
@@ -368,3 +359,19 @@ dfIndex <- dfIndex[,c(1,4,8)]
 
 dfIndexAirbus<- dfIndex[dfIndex$Parent.MNE=="Airbus SE",]
 
+dfIndexAirbus$percent <- floor(dfIndexAirbus$Weight)
+dfIndexAirbus <- dfIndexAirbus[order(desc(dfIndexAirbus$Weight-dfIndexAirbus$percent)),]
+dfIndexAirbus$percent <- dfIndexAirbus$percent + ifelse(1:nrow(dfIndexAirbus)>100-sum(dfIndexAirbus$percent),0,1) 
+dfIndexAirbus <- dfIndexAirbus[order(desc(dfIndexAirbus$percent)),]
+
+df <- expand.grid(x=1:10,y=1:10)
+df$WikiTopic <- rep(dfIndexAirbus$WikiTopic, dfIndexAirbus$percent)
+
+ggplot(df,aes(x=x,y=y,fill=WikiTopic))+
+  geom_tile(color = "black", size = 0.5) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
+  coord_equal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
