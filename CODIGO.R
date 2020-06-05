@@ -55,7 +55,12 @@ dfImpuestos1_transpose$TotalPhysical=rowSums(dfImpuestos1_transpose[-1]=="Physic
 ggplot(dfImpuestos1_transpose, aes(x=TotalAnnualReport)) + 
   geom_histogram(binwidth = 0.1, boundary=0, fill="grey",color="black")
 
+#Impuestos según physical register
 
+dfPhysical<- read.table("OECD-ADIMA-Physical-Register.txt", sep="\t", dec=",",
+                          header=TRUE, skip = 0, na.strings = "NA")
+
+ggplot(dfPhysical, aes(x=Jurisdiction)) + geom_bar() #No se ve muy bien hay demasiados paises..
 
 #¿Cómo ha afectado COVID a las multinacionales?
 
