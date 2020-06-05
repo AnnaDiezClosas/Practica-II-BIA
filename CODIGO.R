@@ -212,3 +212,104 @@ ENEL<-ggplot(data=dfEnel,aes(x=Date))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
   ylab("Index")+ggtitle ("ENEL")
 ENEL
+
+#FACEBOOK, 2019 vs. 2020
+dfFacebook <- dfTrends1_transpose[,c("Date","Facebook Inc")]
+names (dfFacebook)[2] = "Index"
+dfFacebook<-dfFacebook[-(1:5),]
+
+dfFacebook2 <- dfFacebook
+
+dfFacebook<-dfFacebook[1:18,]
+dfFacebook2<-dfFacebook2[53:70,]
+
+dfFacebook$'Index 2020' <- dfFacebook2$Index
+names (dfFacebook)[2] = "Index 2019"
+
+FACEBOOK<-ggplot(data=dfFacebook,aes(x=Date))+
+  geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
+  geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
+  scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
+  ylab("Index")+ggtitle ("FACEBOOK")
+FACEBOOK
+
+#HP, 2019 vs. 2020
+dfHP <- dfTrends1_transpose[,c("Date","HP Inc")]
+names (dfHP)[2] = "Index"
+dfHP<-dfHP[-(1:5),]
+
+dfHP2 <- dfHP
+
+dfHP<-dfHP[1:18,]
+dfHP2<-dfHP2[53:70,]
+
+dfHP$'Index 2020' <- dfHP2$Index
+names (dfHP)[2] = "Index 2019"
+
+HP<-ggplot(data=dfHP,aes(x=Date))+
+  geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
+  geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
+  scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
+  ylab("Index")+ggtitle ("HP")
+HP
+
+#HEINEKEN, 2019 vs. 2020
+dfHeineken <- dfTrends1_transpose[,c("Date","Heineken NV")]
+names (dfHeineken)[2] = "Index"
+dfHeineken<-dfHeineken[-(1:5),]
+
+dfHeineken2 <- dfHeineken
+
+dfHeineken<-dfHeineken[1:18,]
+dfHeineken2<-dfHeineken2[53:70,]
+
+dfHeineken$'Index 2020' <- dfHeineken2$Index
+names (dfHeineken)[2] = "Index 2019"
+
+HEINEKEN<-ggplot(data=dfHeineken,aes(x=Date))+
+  geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
+  geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
+  scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
+  ylab("Index")+ggtitle ("HEINEKEN")
+HEINEKEN
+
+#FORD, 2019 vs. 2020
+dfFord <- dfTrends1_transpose[,c("Date","Ford Motor Co")]
+names (dfFord)[2] = "Index"
+dfFord<-dfFord[-(1:5),]
+
+dfFord2 <- dfFord
+
+dfFord<-dfFord[1:18,]
+dfFord2<-dfFord2[53:70,]
+
+dfFord$'Index 2020' <- dfFord2$Index
+names (dfFord)[2] = "Index 2019"
+
+FORD<-ggplot(data=dfFord,aes(x=Date))+
+  geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
+  geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
+  scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
+  ylab("Index")+ggtitle ("FORD")
+FORD
+
+#WALMART, 2019 vs. 2020
+dfWalmart <- dfTrends1_transpose[,c("Date","Walmart Inc")]
+names (dfWalmart)[2] = "Index"
+dfWalmart<-dfWalmart[-(1:5),]
+
+dfWalmart2 <- dfWalmart
+
+dfWalmart<-dfWalmart[1:18,]
+dfWalmart2<-dfWalmart2[53:70,]
+
+dfWalmart$'Index 2020' <- dfWalmart2$Index
+names (dfWalmart)[2] = "Index 2019"
+
+WALMART<-ggplot(data=dfWalmart,aes(x=Date))+
+  geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
+  geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
+  scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
+  ylab("Index")+ggtitle ("WALMART")
+WALMART
+
