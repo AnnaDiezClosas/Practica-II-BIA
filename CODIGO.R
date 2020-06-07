@@ -489,3 +489,16 @@ ggplot(df4,aes(x=x,y=y,fill=WikiTopic))+
         axis.title = element_blank(),
         axis.ticks = element_blank())
 
+
+#Indice de internacionalidad de las empresas seleccionadas en GoogleTrends
+
+dfInternacionalidad<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
+                          header=TRUE, skip = 0, na.strings = "NA")
+
+dfInternacionalidad1 <- dfInternacionalidad[c(18,29,42,62,186,198,207,225,228,484),]
+
+str(dfInternacionalidad1)
+
+
+ggplot(data=dfInternacionalidad1, aes(x=Parent.MNE, y=International.Share)) + 
+  geom_bar(stat="identity", position="stack")
