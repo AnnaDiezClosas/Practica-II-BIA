@@ -62,6 +62,28 @@ dfPhysical<- read.table("OECD-ADIMA-Physical-Register.txt", sep="\t", dec=",",
 
 ggplot(dfPhysical, aes(x=Jurisdiction)) + geom_bar() #No se ve muy bien hay demasiados paises..
 
+# Ordeno alfabeticamente los paises y separo el dataframe en dos para hacer 
+# dos graficos con menos variables para que se entienda mejor
+dfPhysical$Jurisdiction <- as.character(dfPhysical$Jurisdiction)
+dfPhysical$Jurisdiction <- sort(dfPhysical$Jurisdiction, decreasing = FALSE)
+
+dfPhysical1 <- dfPhysical[1:54452,]
+dfPhysical2 <- dfPhysical[54453:116042,]
+ggplot(dfPhysical1, aes(x=Jurisdiction)) + geom_bar() #sigue sin verse bien..
+ggplot(dfPhysical2, aes(x=Jurisdiction)) + geom_bar() #sigue sin verse bien...
+
+#Divido el grafico en más partes..
+
+dfPhysical1 <- dfPhysical[1:20669,]
+dfPhysical2 <- dfPhysical[20670:57696,]
+dfPhysical3 <- dfPhysical[57697:74534,]
+dfPhysical4 <- dfPhysical[74535:116042,]
+ggplot(dfPhysical1, aes(x=Jurisdiction)) + geom_bar() 
+ggplot(dfPhysical2, aes(x=Jurisdiction)) + geom_bar() 
+ggplot(dfPhysical3, aes(x=Jurisdiction)) + geom_bar() 
+ggplot(dfPhysical4, aes(x=Jurisdiction)) + geom_bar() 
+
+
 #¿Cómo ha afectado COVID a las multinacionales?
 
 dfTrends <- read.table(file = "OECD-ADIMA-500-Google-trends-monitor.txt", header = FALSE, sep = "\t", dec =",")
