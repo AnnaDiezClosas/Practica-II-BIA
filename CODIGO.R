@@ -80,7 +80,8 @@ dfPhysical1 <- dfPhysical[1:20669,]
 dfPhysical2 <- dfPhysical[20670:57696,]
 dfPhysical3 <- dfPhysical[57697:74534,]
 dfPhysical4 <- dfPhysical[74535:116042,]
-ggplot(dfPhysical1, aes(x=Jurisdiction)) + geom_bar() 
+ggplot(dfPhysical1, aes(x=Jurisdiction)) + geom_bar()
+ 
 ggplot(dfPhysical2, aes(x=Jurisdiction)) + geom_bar() 
 ggplot(dfPhysical3, aes(x=Jurisdiction)) + geom_bar() 
 ggplot(dfPhysical4, aes(x=Jurisdiction)) + geom_bar() 
@@ -500,5 +501,5 @@ dfInternacionalidad1 <- dfInternacionalidad[c(18,29,42,62,186,198,207,225,228,48
 str(dfInternacionalidad1)
 
 
-ggplot(data=dfInternacionalidad1, aes(x=Parent.MNE, y=International.Share)) + 
-  geom_bar(stat="identity", position="stack")
+ggplot(data=dfInternacionalidad1, aes(x=Parent.MNE, y=International.Share, fill=Parent.MNE)) + 
+  geom_bar(stat="identity", position="dodge")
