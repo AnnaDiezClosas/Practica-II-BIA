@@ -62,10 +62,12 @@ dfPhysical<- read.table("OECD-ADIMA-Physical-Register.txt", sep="\t", dec=",",
 
 ggplot(dfPhysical, aes(x=Jurisdiction)) + geom_bar() #No se ve muy bien hay demasiados paises..
 
-# Ordeno alfabeticamente los paises y separo el dataframe en dos para hacer 
-# dos graficos con menos variables para que se entienda mejor
+
+# Ordeno alfabeticamente los paises y separo el dataframe
 dfPhysical$Jurisdiction <- as.character(dfPhysical$Jurisdiction)
 dfPhysical$Jurisdiction <- sort(dfPhysical$Jurisdiction, decreasing = FALSE)
+
+#Hago dos graficos oara ver si se ve mejor...
 
 dfPhysical1 <- dfPhysical[1:54452,]
 dfPhysical2 <- dfPhysical[54453:116042,]
