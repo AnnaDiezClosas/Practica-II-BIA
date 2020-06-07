@@ -455,9 +455,30 @@ dfIndexSantander$percent <- dfIndexSantander$percent + ifelse(1:nrow(dfIndexSant
 dfIndexApple <- dfIndexApple[order(desc(dfIndexApple$percent)),]
 
 df3 <- expand.grid(x=1:10,y=1:10)
-df2$WikiTopic <- rep(dfIndexSantander$WikiTopic, dfIndexSantander$percent)
+df3$WikiTopic <- rep(dfIndexSantander$WikiTopic, dfIndexSantander$percent)
 
 ggplot(df3,aes(x=x,y=y,fill=WikiTopic))+
+  geom_tile(color = "black", size = 0.5) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
+  coord_equal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
+
+#DENTRO ENEL
+
+dfIndexEnel<- dfIndex[dfIndex$Parent.MNE=="Enel SpA",]
+
+dfIndexEnel$percent <- floor(dfIndexEnel$Weight)
+dfIndexEnel <- dfIndexEnel[order(desc(dfIndexEnel$Weight-dfIndexEnel$percent)),]
+dfIndexEnel$percent <- dfIndexEnel$percent + ifelse(1:nrow(dfIndexEnel)>100-sum(dfIndexEnel$percent),0,1) 
+dfIndexEnel <- dfIndexEnel[order(desc(dfIndexEnel$percent)),]
+
+df4 <- expand.grid(x=1:10,y=1:10)
+df4$WikiTopic <- rep(dfIndexEnel$WikiTopic, dfIndexEnel$percent)
+
+ggplot(df4,aes(x=x,y=y,fill=WikiTopic))+
   geom_tile(color = "black", size = 0.5) +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
