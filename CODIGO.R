@@ -444,3 +444,25 @@ ggplot(df2,aes(x=x,y=y,fill=WikiTopic))+
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
         axis.ticks = element_blank())
+
+#DENTRO DE BANCO SANTANDER
+
+dfIndexSantander<- dfIndex[dfIndex$Parent.MNE=="Banco Santander SA",]
+
+dfIndexSantander$percent <- floor(dfIndexSantander$Weight)
+dfIndexSantander <- dfIndexSantander[order(desc(dfIndexSantander$Weight-dfIndexSantander$percent)),]
+dfIndexSantander$percent <- dfIndexSantander$percent + ifelse(1:nrow(dfIndexSantander)>100-sum(dfIndexSantander$percent),0,1) 
+dfIndexApple <- dfIndexApple[order(desc(dfIndexApple$percent)),]
+
+df3 <- expand.grid(x=1:10,y=1:10)
+df2$WikiTopic <- rep(dfIndexSantander$WikiTopic, dfIndexSantander$percent)
+
+ggplot(df3,aes(x=x,y=y,fill=WikiTopic))+
+  geom_tile(color = "black", size = 0.5) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
+  coord_equal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
+
