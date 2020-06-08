@@ -74,36 +74,6 @@ ggplot(data=dfImpuestos1_transpose4, aes(x=País, y=PresenciaTotal)) +
   geom_bar(stat="identity", position="dodge")
 
 
-#Impuestos según physical register
-
-dfPhysical<- read.table("OECD-ADIMA-Physical-Register.txt", sep="\t", dec=",",
-                          header=TRUE, skip = 0, na.strings = "NA")
-
-ggplot(dfPhysical, aes(x=Jurisdiction)) + geom_bar() #No se ve muy bien hay demasiados paises..
-
-
-# Ordeno alfabeticamente los paises y separo el dataframe
-dfPhysical$Jurisdiction <- as.character(dfPhysical$Jurisdiction)
-dfPhysical$Jurisdiction <- sort(dfPhysical$Jurisdiction, decreasing = FALSE)
-
-#Hago dos graficos para ver si se ve mejor...
-
-dfPhysical1 <- dfPhysical[1:54452,]
-dfPhysical2 <- dfPhysical[54453:116042,]
-ggplot(dfPhysical1, aes(x=Jurisdiction)) + geom_bar() #sigue sin verse bien..
-ggplot(dfPhysical2, aes(x=Jurisdiction)) + geom_bar() #sigue sin verse bien...
-
-#Divido el grafico en más partes..
-
-dfPhysical1 <- dfPhysical[1:20669,]
-dfPhysical2 <- dfPhysical[20670:57696,]
-dfPhysical3 <- dfPhysical[57697:74534,]
-dfPhysical4 <- dfPhysical[74535:116042,]
-ggplot(dfPhysical1, aes(x=Jurisdiction)) + geom_bar()
-ggplot(dfPhysical2, aes(x=Jurisdiction)) + geom_bar() 
-ggplot(dfPhysical3, aes(x=Jurisdiction)) + geom_bar() 
-ggplot(dfPhysical4, aes(x=Jurisdiction)) + geom_bar() 
-
 
 #¿Cómo ha afectado COVID a las multinacionales?
 
