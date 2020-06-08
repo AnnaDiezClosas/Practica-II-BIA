@@ -74,7 +74,6 @@ ggplot(data=dfImpuestos1_transpose4, aes(x=País, y=PresenciaTotal)) +
   geom_bar(stat="identity", position="dodge")
 
 
-
 #¿Cómo ha afectado COVID a las multinacionales?
 
 dfTrends <- read.table(file = "OECD-ADIMA-500-Google-trends-monitor.txt", header = FALSE, sep = "\t", dec =",")
