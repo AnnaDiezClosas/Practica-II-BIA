@@ -51,9 +51,28 @@ names(dfImpuestos1_transpose)[1]="País"
 dfImpuestos1_transpose$TotalAnnualReport=rowSums(dfImpuestos1_transpose[-1]=="Annual Reporting")
 dfImpuestos1_transpose$TotalPhysical=rowSums(dfImpuestos1_transpose[-1]=="Physical")
 
+dfImpuestos1_transpose$PresenciaTotal=(dfImpuestos1_transpose$TotalAnnualReport+dfImpuestos1_transpose$TotalPhysical)
 
-ggplot(dfImpuestos1_transpose, aes(x=TotalAnnualReport)) + 
-  geom_histogram(binwidth = 0.1, boundary=0, fill="grey",color="black")
+
+ggplot(data=dfImpuestos1_transpose, aes(x=País, y=PresenciaTotal)) +  #No se ve muy bien porque hay muchos datos
+  geom_bar(stat="identity", position="dodge")
+
+#Dividimos el grafico en varias partes para hacerlo entendible..
+
+dfImpuestos1_transpose1 <- dfImpuestos1_transpose[1:60,]
+dfImpuestos1_transpose2 <- dfImpuestos1_transpose[61:121,]
+dfImpuestos1_transpose3 <- dfImpuestos1_transpose[122:182,]
+dfImpuestos1_transpose4 <- dfImpuestos1_transpose[183:237,]
+
+ggplot(data=dfImpuestos1_transpose1, aes(x=País, y=PresenciaTotal)) +  
+  geom_bar(stat="identity", position="dodge")
+ggplot(data=dfImpuestos1_transpose2, aes(x=País, y=PresenciaTotal)) +  
+  geom_bar(stat="identity", position="dodge")
+ggplot(data=dfImpuestos1_transpose3, aes(x=País, y=PresenciaTotal)) +  
+  geom_bar(stat="identity", position="dodge")
+ggplot(data=dfImpuestos1_transpose4, aes(x=País, y=PresenciaTotal)) +  
+  geom_bar(stat="identity", position="dodge")
+
 
 #Impuestos según physical register
 
@@ -67,7 +86,7 @@ ggplot(dfPhysical, aes(x=Jurisdiction)) + geom_bar() #No se ve muy bien hay dema
 dfPhysical$Jurisdiction <- as.character(dfPhysical$Jurisdiction)
 dfPhysical$Jurisdiction <- sort(dfPhysical$Jurisdiction, decreasing = FALSE)
 
-#Hago dos graficos oara ver si se ve mejor...
+#Hago dos graficos para ver si se ve mejor...
 
 dfPhysical1 <- dfPhysical[1:54452,]
 dfPhysical2 <- dfPhysical[54453:116042,]
@@ -81,7 +100,6 @@ dfPhysical2 <- dfPhysical[20670:57696,]
 dfPhysical3 <- dfPhysical[57697:74534,]
 dfPhysical4 <- dfPhysical[74535:116042,]
 ggplot(dfPhysical1, aes(x=Jurisdiction)) + geom_bar()
- 
 ggplot(dfPhysical2, aes(x=Jurisdiction)) + geom_bar() 
 ggplot(dfPhysical3, aes(x=Jurisdiction)) + geom_bar() 
 ggplot(dfPhysical4, aes(x=Jurisdiction)) + geom_bar() 
