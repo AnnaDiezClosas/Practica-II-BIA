@@ -455,7 +455,7 @@ dfIndexSantander<- dfIndex[dfIndex$Parent.MNE=="Banco Santander SA",]
 dfIndexSantander$percent <- floor(dfIndexSantander$Weight)
 dfIndexSantander <- dfIndexSantander[order(desc(dfIndexSantander$Weight-dfIndexSantander$percent)),]
 dfIndexSantander$percent <- dfIndexSantander$percent + ifelse(1:nrow(dfIndexSantander)>100-sum(dfIndexSantander$percent),0,1) 
-dfIndexApple <- dfIndexApple[order(desc(dfIndexApple$percent)),]
+dfIndexSantander <- dfIndexSantander[order(desc(dfIndexSantander$percent)),]
 
 df3 <- expand.grid(x=1:10,y=1:10)
 df3$WikiTopic <- rep(dfIndexSantander$WikiTopic, dfIndexSantander$percent)
@@ -489,6 +489,49 @@ ggplot(df4,aes(x=x,y=y,fill=WikiTopic))+
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
         axis.ticks = element_blank())
+
+#DENTRO FACEBOOK
+
+dfIndexFacebook<- dfIndex[dfIndex$Parent.MNE=="Facebook Inc",]
+
+dfIndexFacebook$percent <- floor(dfIndexFacebook$Weight)
+dfIndexFacebook <- dfIndexFacebook[order(desc(dfIndexFacebook$Weight-dfIndexFacebook$percent)),]
+dfIndexFacebook$percent <- dfIndexFacebook$percent + ifelse(1:nrow(dfIndexFacebook)>100-sum(dfIndexFacebook$percent),0,1) 
+dfIndexFacebook <- dfIndexFacebook[order(desc(dfIndexFacebook$percent)),]
+
+df5 <- expand.grid(x=1:10,y=1:10)
+df5$WikiTopic <- rep(dfIndexFacebook$WikiTopic, dfIndexFacebook$percent)
+
+ggplot(df5,aes(x=x,y=y,fill=WikiTopic))+
+  geom_tile(color = "black", size = 0.5) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
+  coord_equal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
+
+#DENTRO HP
+
+dfIndexHP<- dfIndex[dfIndex$Parent.MNE=="HP Inc",]
+
+dfIndexHP$percent <- floor(dfIndexHP$Weight)
+dfIndexHP <- dfIndexHP[order(desc(dfIndexHP$Weight-dfIndexHP$percent)),]
+dfIndexHP$percent <- dfIndexHP$percent + ifelse(1:nrow(dfIndexHP)>100-sum(dfIndexHP$percent),0,1) 
+dfIndexHP <- dfIndexHP[order(desc(dfIndexHP$percent)),]
+
+df6 <- expand.grid(x=1:10,y=1:10)
+df6$WikiTopic <- rep(dfIndexHP$WikiTopic, dfIndexHP$percent)
+
+ggplot(df6,aes(x=x,y=y,fill=WikiTopic))+
+  geom_tile(color = "black", size = 0.5) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
+  coord_equal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
+
 
 
 #Indice de internacionalidad de las empresas seleccionadas en GoogleTrends
