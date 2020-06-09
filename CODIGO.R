@@ -78,7 +78,16 @@ dfImpuestos_transposeFormato1<-gather(dfImpuestos_transposeFormato,"variable","F
 ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
 
 #EN UN MAPAMUNDI:
-world.map <- readOGR(dsn="C:/Users/Usuari/Desktop/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO
+
+install.packages("sp")
+install.packages("maps")
+install.packages("rgeos")
+install.packages("ggplot2")
+install.packages("rgdal")
+install.packages("gpclib")
+install.packages("maptools")
+
+world.map <- readOGR(dsn="C:/Users/adiez/Desktop/Business Intelligence/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO
 world.ggmap <- fortify(world.map, region = "ISO2")
 head(world.map@data)
 
