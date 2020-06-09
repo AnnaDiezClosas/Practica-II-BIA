@@ -59,7 +59,7 @@ dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:35,c(1,502,503)]
 
 
 dfImpuestos_transposeSimplificada1<-gather(dfImpuestos_transposeSimplificada,"variable","Frequency",-1)
-ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity')
+ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
 
 #En que 35 paises se encuentran mas multinacioneles y en que formato (fisico o digital)
 
@@ -71,7 +71,7 @@ dfImpuestos_transposeFormato <- dfImpuestos1_transpose[1:35,c(1,504,505)]
 
 
 dfImpuestos_transposeFormato1<-gather(dfImpuestos_transposeFormato,"variable","Frequency",-1)
-ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity')
+ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
 
 #¿Cómo ha afectado COVID a las multinacionales?
 
