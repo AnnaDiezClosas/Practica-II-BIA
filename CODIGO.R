@@ -176,7 +176,6 @@ dfAirbus2<-dfAirbus2[53:70,]
 dfAirbus$'Index 2020' <- dfAirbus2$Index
 names (dfAirbus)[2] = "Index 2019"
 
-
 AIRBUS<-ggplot(data=dfAirbus,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
@@ -519,7 +518,68 @@ ggplot(df6,aes(x=x,y=y,fill=WikiTopic))+
         axis.title = element_blank(),
         axis.ticks = element_blank())
 
+#DENTRO HEINEKEN
 
+dfIndexHeineken<- dfIndex[dfIndex$Parent.MNE=="Heineken NV",]
+
+dfIndexHeineken$percent <- floor(dfIndexHeineken$Weight)
+dfIndexHeineken <- dfIndexHeineken[order(desc(dfIndexHeineken$Weight-dfIndexHeineken$percent)),]
+dfIndexHeineken$percent <- dfIndexHeineken$percent + ifelse(1:nrow(dfIndexHeineken)>100-sum(dfIndexHeineken$percent),0,1) 
+dfIndexHeineken <- dfIndexHeineken[order(desc(dfIndexHeineken$percent)),]
+
+df7 <- expand.grid(x=1:10,y=1:10)
+df7$WikiTopic <- rep(dfIndexHeineken$WikiTopic, dfIndexHeineken$percent)
+
+ggplot(df7,aes(x=x,y=y,fill=WikiTopic))+
+  geom_tile(color = "black", size = 0.5) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
+  coord_equal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
+
+#DENTRO FORD
+
+dfIndexFord<- dfIndex[dfIndex$Parent.MNE=="Ford Motor Co",]
+
+dfIndexFord$percent <- floor(dfIndexFord$Weight)
+dfIndexFord <- dfIndexFord[order(desc(dfIndexFord$Weight-dfIndexFord$percent)),]
+dfIndexFord$percent <- dfIndexFord$percent + ifelse(1:nrow(dfIndexFord)>100-sum(dfIndexFord$percent),0,1) 
+dfIndexFord <- dfIndexFord[order(desc(dfIndexFord$percent)),]
+
+df8 <- expand.grid(x=1:10,y=1:10)
+df8$WikiTopic <- rep(dfIndexFord$WikiTopic, dfIndexFord$percent)
+
+ggplot(df8,aes(x=x,y=y,fill=WikiTopic))+
+  geom_tile(color = "black", size = 0.5) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
+  coord_equal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
+
+#DENTRO WALMART
+
+dfIndexWalmart<- dfIndex[dfIndex$Parent.MNE=="Walmart Inc",]
+
+dfIndexWalmart$percent <- floor(dfIndexWalmart$Weight)
+dfIndexWalmart <- dfIndexWalmart[order(desc(dfIndexWalmart$Weight-dfIndexWalmart$percent)),]
+dfIndexWalmart$percent <- dfIndexWalmart$percent + ifelse(1:nrow(dfIndexWalmart)>100-sum(dfIndexWalmart$percent),0,1) 
+dfIndexWalmart <- dfIndexWalmart[order(desc(dfIndexWalmart$percent)),]
+
+df9 <- expand.grid(x=1:10,y=1:10)
+df9$WikiTopic <- rep(dfIndexWalmart$WikiTopic, dfIndexWalmart$percent)
+
+ggplot(df9,aes(x=x,y=y,fill=WikiTopic))+
+  geom_tile(color = "black", size = 0.5) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0), trans = 'reverse') +
+  coord_equal() +
+  theme(axis.text = element_blank(),
+        axis.title = element_blank(),
+        axis.ticks = element_blank())
 
 #Indice de internacionalidad de las empresas seleccionadas en GoogleTrends
 
