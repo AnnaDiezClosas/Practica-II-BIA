@@ -38,7 +38,7 @@ if(!require("rgdal")) {
 
 #¿Dónde están las empresas multinacionales?
 
-ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar()
+ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
 
 #¿Cuales son los 35 países en donde pagan mas impuestos las empresas?#
 
@@ -63,7 +63,7 @@ dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:35,c(1,502,503)]
 
 
 dfImpuestos_transposeSimplificada1<-gather(dfImpuestos_transposeSimplificada,"variable","Frequency",-1)
-ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
+ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
 
 #En que 35 paises se encuentran mas multinacioneles y en que formato (fisico o digital)
 
@@ -75,7 +75,7 @@ dfImpuestos_transposeFormato <- dfImpuestos1_transpose[1:35,c(1,504,505)]
 
 
 dfImpuestos_transposeFormato1<-gather(dfImpuestos_transposeFormato,"variable","Frequency",-1)
-ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
+ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
 
 #EN UN MAPAMUNDI:
 
