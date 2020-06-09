@@ -31,6 +31,10 @@ if(!require("dplyr")) {
   install.packages("dplyr")
   library("dplyr")
 }
+if(!require("rgdal")) {
+  install.packages("rgdal")
+  library("rgdal")
+}
 
 #¿Dónde están las empresas multinacionales?
 
@@ -72,6 +76,37 @@ dfImpuestos_transposeFormato <- dfImpuestos1_transpose[1:35,c(1,504,505)]
 
 dfImpuestos_transposeFormato1<-gather(dfImpuestos_transposeFormato,"variable","Frequency",-1)
 ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
+
+#EN UN MAPAMUNDI:
+world.map <- readOGR(dsn="C:/Users/Usuari/Desktop/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO
+world.ggmap <- fortify(world.map, region = "ISO2")
+head(world.map@data)
+
+tcp<-dfImpuestos1_transpose[,c(1,502)]
+
+names(tcp)<-c("id","PresenciaTotalFisica")
+tcp$id<-tolower(tcp$id)
+world.ggmap$id<-tolower(world.ggmap$id)
+
+world.ggmape <- merge(world.ggmap, tcp, by = "id", all = TRUE)
+world.ggmape <- world.ggmape[order(world.ggmape$order), ]
+
+world.plot <- ggplot(data = world.ggmape, aes(x = long, y = lat, group = group))+ geom_polygon(aes(fill =PresenciaTotalFisica), stat='identity')+ geom_path(aes(x=long, y=lat, group=group), color="gray")
+world.plot
+
+#¿En qué países se tiene más presencia digital? 
+tcp2<-dfImpuestos1_transpose[,c(1,503)]
+names(tcp2)<-c("id","TotalDigital")
+tcp2$id<-tolower(tcp2$id)
+world.ggmap$id<-tolower(world.ggmap$id)
+
+world.ggmape2 <- merge(world.ggmap, tcp2, by = "id", all = TRUE)
+world.ggmape2 <- world.ggmape2[order(world.ggmape2$order), ]
+
+world.plot2 <- ggplot(data = world.ggmape2, aes(x = long, y = lat, group = group))+ geom_polygon(aes(fill =TotalDigital), stat='identity')+ geom_path(aes(x=long, y=lat, group=group), color="gray")
+world.plot2
+
+
 
 #¿Cómo ha afectado COVID a las multinacionales?
 
