@@ -13,9 +13,19 @@ shinyUI(navbarPage("EMN Worldwide",
       )
     )
   ),
-  tabPanel("Taxes"
-    
+  tabPanel("Taxes",
+    sidebarLayout(
+      sidebarPanel(
+        selectInput("Plot", "Select a Plot:", 
+                    choices = c("Mapa Mundi Plot", "Bar Plot")
+               )
+             ),
+             mainPanel(
+               plotOutput("TaxPlot")
+             )
+           )
   )
+  
 
 ))
 
