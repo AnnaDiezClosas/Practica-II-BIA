@@ -236,7 +236,7 @@ shinyServer(function(input, output) {
     
   }) 
 
-  output$TaxPlot <- renderPrint({
+  output$TaxPlot <- renderPlot({
    
     Plotselected <- input$Plot
     
