@@ -33,6 +33,32 @@ if(!require("rgdal")) {
   library("rgdal")
 }
 
+if(!require("sp")) {
+  install.packages("sp")
+  library("sp")
+}
+
+if(!require("maps")) {
+  install.packages("maps")
+  library("maps")
+}
+
+if(!require("rgeos")) {
+  install.packages("rgeos")
+  library("rgeos")
+}
+
+if(!require("gpclib")) {
+  install.packages("gpclib")
+  library("gpclib")
+}
+
+if(!require("maptools")) {
+  install.packages("maptools")
+  library("maptools")
+}
+
+
 #¿Dónde están las empresas multinacionales?
 
 dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
@@ -79,13 +105,6 @@ ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=vari
 
 #EN UN MAPAMUNDI:
 
-install.packages("sp")
-install.packages("maps")
-install.packages("rgeos")
-install.packages("ggplot2")
-install.packages("rgdal")
-install.packages("gpclib")
-install.packages("maptools")
 
 world.map <- readOGR(dsn="C:/Users/adiez/Desktop/Business Intelligence/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO
 world.ggmap <- fortify(world.map, region = "ISO2")
