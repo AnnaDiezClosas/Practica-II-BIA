@@ -17,7 +17,7 @@ shinyUI(navbarPage("EMN Worldwide",
     sidebarLayout(
       sidebarPanel(
         selectInput("Plot", "Select a Plot:", 
-                    choices = c("Mapa Mundi Plot", "Bar Plot")
+                    choices = c("Bar Plot")
                )
              ),
              mainPanel(
