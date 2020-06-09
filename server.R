@@ -264,7 +264,7 @@ shinyServer(function(input, output) {
       
       dfImpuestos_transposeSimplificada1<-gather(dfImpuestos_transposeSimplificada,"variable","Frequency",-1)
       
-      ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
+      ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
     }
     
     
