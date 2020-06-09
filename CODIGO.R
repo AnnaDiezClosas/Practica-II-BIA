@@ -36,7 +36,7 @@ if(!require("dplyr")) {
 
 ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar()
 
-#¿Dónde pagan impuestos?#
+#¿Cuales son los 35 países en donde pagan mas impuestos las empresas?#
 
 dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
                           header=FALSE)
@@ -53,26 +53,25 @@ dfImpuestos1_transpose$TotalPhysical=rowSums(dfImpuestos1_transpose[-1]=="Physic
 
 dfImpuestos1_transpose$PresenciaTotal=(dfImpuestos1_transpose$TotalAnnualReport+dfImpuestos1_transpose$TotalPhysical)
 
+dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotal))
 
-ggplot(data=dfImpuestos1_transpose, aes(x=País, y=PresenciaTotal)) +  #No se ve muy bien porque hay muchos datos
-  geom_bar(stat="identity", position="dodge")
+dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:35,c(1,502,503)]
 
-#Dividimos el grafico en varias partes para hacerlo entendible..
 
-dfImpuestos1_transpose1 <- dfImpuestos1_transpose[1:60,]
-dfImpuestos1_transpose2 <- dfImpuestos1_transpose[61:121,]
-dfImpuestos1_transpose3 <- dfImpuestos1_transpose[122:182,]
-dfImpuestos1_transpose4 <- dfImpuestos1_transpose[183:237,]
+dfImpuestos_transposeSimplificada1<-gather(dfImpuestos_transposeSimplificada,"variable","Frequency",-1)
+ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity')
 
-ggplot(data=dfImpuestos1_transpose1, aes(x=País, y=PresenciaTotal)) +  
-  geom_bar(stat="identity", position="dodge")
-ggplot(data=dfImpuestos1_transpose2, aes(x=País, y=PresenciaTotal)) +  
-  geom_bar(stat="identity", position="dodge")
-ggplot(data=dfImpuestos1_transpose3, aes(x=País, y=PresenciaTotal)) +  
-  geom_bar(stat="identity", position="dodge")
-ggplot(data=dfImpuestos1_transpose4, aes(x=País, y=PresenciaTotal)) +  
-  geom_bar(stat="identity", position="dodge")
+#En que 35 paises se encuentran mas multinacioneles y en que formato (fisico o digital)
 
+dfImpuestos1_transpose$TotalDigital=rowSums(dfImpuestos1_transpose[-1]=="Digital")
+
+dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotal))
+
+dfImpuestos_transposeFormato <- dfImpuestos1_transpose[1:35,c(1,504,505)]
+
+
+dfImpuestos_transposeFormato1<-gather(dfImpuestos_transposeFormato,"variable","Frequency",-1)
+ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity')
 
 #¿Cómo ha afectado COVID a las multinacionales?
 
