@@ -1,6 +1,8 @@
 library(shiny)
 library(ggthemes)
 library(ggplot2)
+library(dplyr)
+library(tidyr)
 
 shinyServer(function(input, output) {
   output$distPlot <- renderPlot({
@@ -234,9 +236,39 @@ shinyServer(function(input, output) {
     
   }) 
 
-  #output$summary <- renderPrint({
-   # summary(cars)
- # })
+  output$TaxPlot <- renderPrint({
+   
+    Plotselected <- input$Plot
+    
+    if (Plotselected=="Bar Plot"){
+      
+      dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
+                                header=FALSE)
+      
+      dfImpuestos1 <- dfImpuestos[,-(2:11)]
+      
+      dfImpuestos1[,-1]<-apply(dfImpuestos1[,-1],2,as.character)
+      
+      dfImpuestos1_transpose <- data.frame(t(dfImpuestos1[-1]))
+      names(dfImpuestos1_transpose)[1]="País"
+      
+      dfImpuestos1_transpose$TotalAnnualReport=rowSums(dfImpuestos1_transpose[-1]=="Annual Reporting")
+      dfImpuestos1_transpose$TotalPhysical=rowSums(dfImpuestos1_transpose[-1]=="Physical")
+      
+      dfImpuestos1_transpose$PresenciaTotalFisica=(dfImpuestos1_transpose$TotalAnnualReport+dfImpuestos1_transpose$TotalPhysical)
+      
+      dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotalFisica))
+      
+      dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:35,c(1,502,503)]
+      
+      
+      dfImpuestos_transposeSimplificada1<-gather(dfImpuestos_transposeSimplificada,"variable","Frequency",-1)
+      
+      ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
+    }
+    
+    
+  })
 
   #output$table <- DT::renderDataTable({
    # DT::datatable(cars)
