@@ -51,9 +51,9 @@ names(dfImpuestos1_transpose)[1]="País"
 dfImpuestos1_transpose$TotalAnnualReport=rowSums(dfImpuestos1_transpose[-1]=="Annual Reporting")
 dfImpuestos1_transpose$TotalPhysical=rowSums(dfImpuestos1_transpose[-1]=="Physical")
 
-dfImpuestos1_transpose$PresenciaTotal=(dfImpuestos1_transpose$TotalAnnualReport+dfImpuestos1_transpose$TotalPhysical)
+dfImpuestos1_transpose$PresenciaTotalFisica=(dfImpuestos1_transpose$TotalAnnualReport+dfImpuestos1_transpose$TotalPhysical)
 
-dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotal))
+dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotalFisica))
 
 dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:35,c(1,502,503)]
 
@@ -65,7 +65,7 @@ ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill
 
 dfImpuestos1_transpose$TotalDigital=rowSums(dfImpuestos1_transpose[-1]=="Digital")
 
-dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotal))
+dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotalFisica))
 
 dfImpuestos_transposeFormato <- dfImpuestos1_transpose[1:35,c(1,504,505)]
 
