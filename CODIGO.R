@@ -1,8 +1,5 @@
 #proyecto
 
-dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
-                           header=TRUE, skip = 0, na.strings = "NA")
-
 str(dfIndicators)
 if(!require("ggplot2")) {
   install.packages("ggplot2")
@@ -37,6 +34,9 @@ if(!require("rgdal")) {
 }
 
 #¿Dónde están las empresas multinacionales?
+
+dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
+                          header=TRUE, skip = 0, na.strings = "NA")
 
 ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
 
