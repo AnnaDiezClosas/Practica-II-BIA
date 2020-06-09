@@ -16,9 +16,7 @@ shinyUI(navbarPage("EMN Worldwide",
   tabPanel("Taxes",
     sidebarLayout(
       sidebarPanel(
-        selectInput("Plot", "Select a Plot:", 
-                    choices = c("Bar Plot")
-               )
+        numericInput("bins",label= "Select a number of Multinationals:", value=35, min=1)
              ),
              mainPanel(
                plotOutput("TaxPlot")
