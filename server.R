@@ -238,9 +238,8 @@ shinyServer(function(input, output) {
 
   output$TaxPlot <- renderPlot({
    
-    Plotselected <- input$Plot
-    
-    if (Plotselected=="Bar Plot"){
+    nbins <- input$bins
+  
       
       dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
                                 header=FALSE)
@@ -259,13 +258,13 @@ shinyServer(function(input, output) {
       
       dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotalFisica))
       
-      dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:35,c(1,502,503)]
+      dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:nbins,c(1,502,503)]
       
       
       dfImpuestos_transposeSimplificada1<-gather(dfImpuestos_transposeSimplificada,"variable","Frequency",-1)
       
       ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
-    }
+
     
     
   })
