@@ -654,4 +654,4 @@ str(dfInternacionalidad1)
 
 
 ggplot(data=dfInternacionalidad1, aes(x=Parent.MNE, y=International.Share, fill=Parent.MNE)) + 
-  geom_bar(stat="identity", position="dodge")
+  geom_bar(stat="identity", position="dodge") + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
