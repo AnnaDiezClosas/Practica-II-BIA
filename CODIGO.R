@@ -58,21 +58,21 @@ if(!require("maptools")) {
 }
 
 
-#¿Dónde están las empresas multinacionales?
+#¿Dónde se encuentran las EMN?
 
 dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
                           header=TRUE, skip = 0, na.strings = "NA")
 
-ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) + ggtitle ("¿Dónde están las empresas multinacionales?") +  
+ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) + ggtitle ("¿Dónde se encuentran las EMN?") +  
   theme (plot.title = element_text(family="Comic Sans MS",
-                                   size=rel(2), 
-                                   vjust=2, 
+                                   size=rel(1.5), 
+                                   vjust=1.5, 
                                    face="bold", 
                                    color="grey", 
                                    lineheight=1.5)) +
   xlab("País")+ylab("Número de empresas")
 
-#¿Cuales son los 35 países en donde pagan mas impuestos las multinacionales?#
+#¿Cuáles son los 35 países donde hay más EMN que pagan impuestos?
 
 dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
                           header=FALSE)
@@ -103,7 +103,7 @@ ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill
                                    color="grey", 
                                    lineheight=1.5)) +xlab("País")+ylab("Número de empresas")
 
-#En que 35 paises se encuentran mas multinacioneles y en que formato (fisico o digital)
+#¿Cuáles son los 35 países donde se encuentran más EMN y en que registro, físico o digital?
 
 dfImpuestos1_transpose$TotalDigital=rowSums(dfImpuestos1_transpose[-1]=="Digital")
 
@@ -121,8 +121,9 @@ ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=vari
                                    color="grey", 
                                    lineheight=1.5))+ xlab("País")+ylab("Número de empresas")
 
-#EN UN MAPAMUNDI:
 
+#¿Qué países tienen más presencia física de EMN?
+#EN UN MAPAMUNDI:
 
 world.map <- readOGR(dsn="C:/Users/adiez/Desktop/Business Intelligence/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO
 world.ggmap <- fortify(world.map, region = "ISO2")
@@ -137,7 +138,7 @@ world.ggmap$id<-tolower(world.ggmap$id)
 world.ggmape <- merge(world.ggmap, tcp, by = "id", all = TRUE)
 world.ggmape <- world.ggmape[order(world.ggmape$order), ]
 
-world.plot <- ggplot(data = world.ggmape, aes(x = long, y = lat, group = group))+ geom_polygon(aes(fill =PresenciaTotalFisica), stat='identity')+ geom_path(aes(x=long, y=lat, group=group), color="gray")+ theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países en donde pagan más impuestos las multinacionales") +  
+world.plot <- ggplot(data = world.ggmape, aes(x = long, y = lat, group = group))+ geom_polygon(aes(fill =PresenciaTotalFisica), stat='identity')+ geom_path(aes(x=long, y=lat, group=group), color="gray")+ theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("¿Qué países tienen más presencia física de EMN?") +  
   theme (plot.title = element_text(family="Comic Sans MS",
                                    size=rel(1.5), 
                                    vjust=1, 
@@ -146,7 +147,7 @@ world.plot <- ggplot(data = world.ggmape, aes(x = long, y = lat, group = group))
                                    lineheight=1.5)) 
 world.plot
 
-#¿En qué países se tiene más presencia digital? 
+#¿Qué países tienen más presencia digital de EMN? 
 tcp2<-dfImpuestos1_transpose[,c(1,503)]
 names(tcp2)<-c("id","TotalDigital")
 tcp2$id<-tolower(tcp2$id)
@@ -155,7 +156,7 @@ world.ggmap$id<-tolower(world.ggmap$id)
 world.ggmape2 <- merge(world.ggmap, tcp2, by = "id", all = TRUE)
 world.ggmape2 <- world.ggmape2[order(world.ggmape2$order), ]
 
-world.plot2 <- ggplot(data = world.ggmape2, aes(x = long, y = lat, group = group))+ geom_polygon(aes(fill =TotalDigital), stat='identity')+ geom_path(aes(x=long, y=lat, group=group), color="gray")+ ggtitle ("35 países con más presencia física y digital de multinacionales") +  
+world.plot2 <- ggplot(data = world.ggmape2, aes(x = long, y = lat, group = group))+ geom_polygon(aes(fill =TotalDigital), stat='identity')+ geom_path(aes(x=long, y=lat, group=group), color="gray")+ ggtitle ("¿Qué países tienen más presencia digital de EMN?") +  
   theme (plot.title = element_text(family="Comic Sans MS",
                                    size=rel(1.5), 
                                    vjust=1, 
@@ -167,7 +168,7 @@ world.plot2
 
 
 
-#¿Cómo ha afectado COVID a las multinacionales?
+#¿Cómo ha afectado el COVID-19 a 10 de las EMN?
 
 dfTrends <- read.table(file = "OECD-ADIMA-500-Google-trends-monitor.txt", header = FALSE, sep = "\t", dec =",")
 dfTrends$V1 <- as.character(dfTrends$V1)
@@ -267,6 +268,7 @@ TOT2<-ggplot(data=dfTrends1_transpose,aes(x=Date))+
                                    lineheight=1.5))
 TOT2
 
+#¿Cómo difiere la tendencia de interés 2019 vs 2020 de estas 10 EMN?
 #AIRBUS, 2019 vs. 2020
 
 dfAirbus <- dfTrends1_transpose[,c("Date","Airbus SE")]
@@ -529,7 +531,7 @@ WALMART<-ggplot(data=dfWalmart,aes(x=Date))+
                                    lineheight=1.5)) 
 WALMART
 
-#¿Qué temas o sectores preocupan más dentro de cada EMN? 
+#¿Qué temas o sectores preocupan o interesan más dentro de cada una de estas 10 EMN?
 
 dfIndex <- read.table("OECD-ADIMA-500-IndexConstituyents.txt", sep="\t", dec=",", quote = "\"'",
                            header=TRUE, skip = 0, na.strings = "NA")
@@ -805,6 +807,9 @@ ggplot(df9,aes(x=x,y=y,fill=WikiTopic))+
                                    face="bold", 
                                    color="grey", 
                                    lineheight=1.5)) 
+
+
+#¿Las empresas con un interés creciente tienen más presencia internacional?
 
 #Indice de internacionalidad de las empresas seleccionadas en GoogleTrends
 
