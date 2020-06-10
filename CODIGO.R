@@ -95,7 +95,7 @@ dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:35,c(1,502,503)]
 
 
 dfImpuestos_transposeSimplificada1<-gather(dfImpuestos_transposeSimplificada,"variable","Frequency",-1)
-ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países en donde pagan más impuestos las multinacionales") +  
+ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países donde hay más EMN que pagan impuestos") +  
   theme (plot.title = element_text(family="Comic Sans MS",
                                    size=rel(1.5), 
                                    vjust=1, 
@@ -113,7 +113,7 @@ dfImpuestos_transposeFormato <- dfImpuestos1_transpose[1:35,c(1,504,505)]
 
 
 dfImpuestos_transposeFormato1<-gather(dfImpuestos_transposeFormato,"variable","Frequency",-1)
-ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países con más presencia fisica y digital de multinacionales") +  
+ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países con más presencia fisica y digital de EMN") +  
   theme (plot.title = element_text(family="Comic Sans MS",
                                    size=rel(1.5), 
                                    vjust=1, 
