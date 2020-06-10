@@ -16,7 +16,7 @@ shinyUI(navbarPage("EMN Worldwide",
   tabPanel("Taxes",
     sidebarLayout(
       sidebarPanel(
-        numericInput("bins",label= "Select a number of Multinationals:", value=35, min=1)
+        numericInput("bins",label= "Select the number of countries on which multinationals pay more taxes:", value=35, min=1)
              ),
              mainPanel(
                plotOutput("TaxPlot")
