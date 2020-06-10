@@ -69,7 +69,8 @@ ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar() + theme(axi
                                    vjust=2, 
                                    face="bold", 
                                    color="grey", 
-                                   lineheight=1.5)) 
+                                   lineheight=1.5)) +
+  xlab("País")+ylab("Número de empresas")
 
 #¿Cuales son los 35 países en donde pagan mas impuestos las multinacionales?#
 
@@ -100,7 +101,7 @@ ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill
                                    vjust=1, 
                                    face="bold", 
                                    color="grey", 
-                                   lineheight=1.5)) 
+                                   lineheight=1.5)) +xlab("País")+ylab("Número de empresas")
 
 #En que 35 paises se encuentran mas multinacioneles y en que formato (fisico o digital)
 
@@ -118,7 +119,7 @@ ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=vari
                                    vjust=1, 
                                    face="bold", 
                                    color="grey", 
-                                   lineheight=1.5)) 
+                                   lineheight=1.5))+ xlab("País")+ylab("Número de empresas")
 
 #EN UN MAPAMUNDI:
 
