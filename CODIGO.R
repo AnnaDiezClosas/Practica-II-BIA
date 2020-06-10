@@ -1,9 +1,6 @@
 #proyecto
 
-dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
-                           header=TRUE, skip = 0, na.strings = "NA")
 
-str(dfIndicators)
 if(!require("ggplot2")) {
   install.packages("ggplot2")
   library("ggplot2")
@@ -38,6 +35,9 @@ if(!require("rgdal")) {
 
 #¿Dónde están las empresas multinacionales?
 
+dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
+                          header=TRUE, skip = 0, na.strings = "NA")
+str(dfIndicators)
 ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar()
 
 #¿Cuales son los 35 países en donde pagan mas impuestos las empresas?#
@@ -86,8 +86,9 @@ install.packages("ggplot2")
 install.packages("rgdal")
 install.packages("gpclib")
 install.packages("maptools")
+install.packages("rgdal")
 
-world.map <- readOGR(dsn="C:/Users/adiez/Desktop/Business Intelligence/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO
+world.map <- readOGR(dsn="C:/Users/Usuari/Desktop/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO
 world.ggmap <- fortify(world.map, region = "ISO2")
 head(world.map@data)
 
@@ -120,6 +121,7 @@ world.plot2
 #¿Cómo ha afectado COVID a las multinacionales?
 
 dfTrends <- read.table(file = "OECD-ADIMA-500-Google-trends-monitor.txt", header = FALSE, sep = "\t", dec =",")
+str(dfTrends)
 dfTrends$V1 <- as.character(dfTrends$V1)
 
 names(dfTrends)[2:76] <- format(as.Date(names(dfTrends)[2:76], format = "X%d.%m.%Y"), format = "%Y-%m-%d")
@@ -411,7 +413,7 @@ WALMART
 
 dfIndex <- read.table("OECD-ADIMA-500-IndexConstituyents.txt", sep="\t", dec=",", quote = "\"'",
                            header=TRUE, skip = 0, na.strings = "NA")
-
+str(dfIndex)
 dfIndex <- dfIndex[,c(1,4,8)]
 
 #DENTRO DE AIRBUS
