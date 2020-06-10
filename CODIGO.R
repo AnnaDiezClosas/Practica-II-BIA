@@ -823,4 +823,4 @@ ggplot(data=dfInternacionalidad1, aes(x=Parent.MNE, y=International.Share, fill=
                                    vjust=1, 
                                    face="bold", 
                                    color="grey", 
-                                   lineheight=1.5)) 
+                                   lineheight=1.5)) + xlab("MNE")+ylab("International Share")
