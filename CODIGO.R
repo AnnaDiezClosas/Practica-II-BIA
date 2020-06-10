@@ -58,12 +58,12 @@ if(!require("maptools")) {
 }
 
 
-#¿Dónde se encuentran las EMN?
+#¿Dónde se encuentran las sedes principales de las EMN?
 
 dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
                           header=TRUE, skip = 0, na.strings = "NA")
 
-ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) + ggtitle ("¿Dónde se encuentran las EMN?") +  
+ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) + ggtitle ("¿Dónde se encuentran las sedes principales de las EMN?") +  
   theme (plot.title = element_text(family="Comic Sans MS",
                                    size=rel(1.5), 
                                    vjust=1.5, 
