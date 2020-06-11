@@ -54,7 +54,13 @@ shinyServer(function(input, output) {
         geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
         geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
         scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-        ylab("Index")
+        ylab("Index")+ggtitle ("AIRBUS")+  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5)) 
     }
     
     if (EMNselected=="Amazon.com Inc"){
@@ -75,7 +81,13 @@ shinyServer(function(input, output) {
         geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
         geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
         scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-        ylab("Index")
+        ylab("Index")+ggtitle ("AMAZON")+  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5))
     }
     
     if (EMNselected=="Apple Inc"){
@@ -95,7 +107,13 @@ shinyServer(function(input, output) {
         geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
         geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
         scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-        ylab("Index")
+        ylab("Index")+ggtitle ("APPLE")+  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5)) 
     }
     if (EMNselected=="Banco Santander SA"){
       dfSantander <- dfTrends1_transpose[,c("Date","Banco Santander SA")]
@@ -114,7 +132,13 @@ shinyServer(function(input, output) {
         geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
         geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
         scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-        ylab("Index")
+        ylab("Index")+ggtitle ("BANCO SANTANDER")+  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5))
       }
     if (EMNselected=="Enel SpA"){
       dfEnel <- dfTrends1_transpose[,c("Date","Enel SpA")]
@@ -133,7 +157,13 @@ shinyServer(function(input, output) {
         geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
         geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
         scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-        ylab("Index")
+        ylab("Index")+ggtitle ("ENEL")+  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5)) 
     }
     
     if (EMNselected=="Facebook Inc"){
@@ -153,7 +183,13 @@ shinyServer(function(input, output) {
         geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
         geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
         scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-        ylab("Index")
+        ylab("Index")+ggtitle ("FACEBOOK")+  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5))
     }
     if (EMNselected=="HP Inc"){
       dfHP <- dfTrends1_transpose[,c("Date","HP Inc")]
@@ -172,7 +208,13 @@ shinyServer(function(input, output) {
         geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
         geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
         scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-        ylab("Index")
+        ylab("Index")+ggtitle ("HP")+  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5)) 
     }
     if (EMNselected=="Heineken NV"){
       dfHeineken <- dfTrends1_transpose[,c("Date","Heineken NV")]
@@ -191,7 +233,13 @@ shinyServer(function(input, output) {
         geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
         geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
         scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-        ylab("Index")
+        ylab("Index")+ggtitle ("HEINEKEN")+  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5))
     }
     if (EMNselected=="Ford Motor Co"){
       dfFord <- dfTrends1_transpose[,c("Date","Ford Motor Co")]
@@ -210,7 +258,13 @@ shinyServer(function(input, output) {
         geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
         geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
         scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-        ylab("Index")
+        ylab("Index")+ggtitle ("FORD")+  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5))
     }
     if (EMNselected=="Walmart Inc"){
       dfWalmart <- dfTrends1_transpose[,c("Date","Walmart Inc")]
@@ -229,7 +283,13 @@ shinyServer(function(input, output) {
         geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
         geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
         scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-        ylab("Index")
+        ylab("Index")+ggtitle ("WALMART")+  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5)) 
     }
     
     GRAFICO
@@ -238,9 +298,8 @@ shinyServer(function(input, output) {
 
   output$TaxPlot <- renderPlot({
    
-    Plotselected <- input$Plot
-    
-    if (Plotselected=="Bar Plot"){
+    nbins <- input$bins
+  
       
       dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
                                 header=FALSE)
@@ -259,13 +318,20 @@ shinyServer(function(input, output) {
       
       dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotalFisica))
       
-      dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:35,c(1,502,503)]
+      dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:nbins,c(1,502,503)]
       
       
       dfImpuestos_transposeSimplificada1<-gather(dfImpuestos_transposeSimplificada,"variable","Frequency",-1)
       
-      ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
-    }
+      ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("Países en donde pagan más impuestos las multinacionales") +  
+        theme (plot.title = element_text(family="Comic Sans MS",
+                                         size=rel(1.5), 
+                                         vjust=1, 
+                                         face="bold", 
+                                         color="grey", 
+                                         lineheight=1.5)) +xlab("País")+ylab("Número de empresas")
+      
+
     
     
   })
