@@ -62,6 +62,9 @@ if(!require("maptools")) {
 
 #Se lee la base de datos y se realiza el gráfico con la columna de las sedes de cada empresa
 
+####¿Dónde se encuentran las sedes principales de las EMN?####
+
+
 dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
                           header=TRUE, skip = 0, na.strings = "NA")
 
@@ -76,27 +79,36 @@ ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar() + theme(axi
 
 #¿Cuáles son los 35 países donde hay más EMN que pagan impuestos?
 
+####¿Cuáles son los 35 países donde hay más EMN que pagan impuestos?####
+
+
+# Se lee la base de datos
 dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
                           header=FALSE)
 
+
+# Se eliminan todas las columnas menos las de interés (Nombre de la empresa, Paises donde puede estar presente la empresa)
 dfImpuestos1 <- dfImpuestos[,-(2:11)]
 
+#Se convierten a caracter todas las variables del data frame
 dfImpuestos1[,-1]<-apply(dfImpuestos1[,-1],2,as.character)
 
+#Se transpone el dataframe y se le añade a la columna de País el título
 dfImpuestos1_transpose <- data.frame(t(dfImpuestos1[-1]))
 names(dfImpuestos1_transpose)[1]="País"
 
+#Se añaden tres columnas necesarias que corresponden a al sumatorio de cada tipo de presencia de las distintas empresas
 dfImpuestos1_transpose$TotalAnnualReport=rowSums(dfImpuestos1_transpose[-1]=="Annual Reporting")
 dfImpuestos1_transpose$TotalPhysical=rowSums(dfImpuestos1_transpose[-1]=="Physical")
-
 dfImpuestos1_transpose$PresenciaTotalFisica=(dfImpuestos1_transpose$TotalAnnualReport+dfImpuestos1_transpose$TotalPhysical)
 
+#Se ordena el dataframe de mayor a menor segun la presencia total de EMN en el País y se segmenta para coger los 35 con mas presencia y las columnas de País, presencia fisica del anual report y presencia fisica del registro fisico
 dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotalFisica))
-
 dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:35,c(1,502,503)]
 
-
+#Se transforma el dataframe para poder hacer le grafico que se desea de tal manera que se obtiene una columna con pais una columna con la variable y otra con la frecuencia de cada opcion para cada pais
 dfImpuestos_transposeSimplificada1<-gather(dfImpuestos_transposeSimplificada,"variable","Frequency",-1)
+
 ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países donde hay más EMN que pagan impuestos") +  
   theme (plot.title = element_text(family="Comic Sans MS",
                                    size=rel(1.5), 
@@ -107,14 +119,31 @@ ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill
 
 #¿Cuáles son los 35 países donde se encuentran más EMN y en que registro, físico o digital?
 
+
+#Se grafica la información de interes
+ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países donde hay más EMN que pagan impuestos") +  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) +xlab("País")+ylab("Número de empresas")
+
+
+####¿Cuáles son los 35 países donde se encuentran más EMN y en que registro, físico o digital?####
+
+#Se añade una columna con el recuento de las empresas con presencia digital en cada País
 dfImpuestos1_transpose$TotalDigital=rowSums(dfImpuestos1_transpose[-1]=="Digital")
 
+#Se odena el dataframe de mayor  amenor presencia digital y se eliminan todas las filas menos las 35 con mayor presencia digital y las columnas de país, presencia fisica total y presencia digital
 dfImpuestos1_transpose<- arrange(dfImpuestos1_transpose, desc(PresenciaTotalFisica))
-
 dfImpuestos_transposeFormato <- dfImpuestos1_transpose[1:35,c(1,504,505)]
 
+#Se transforma el dataframe para poder hacer le grafico que se desea de tal manera que se obtiene una columna con pais una columna con la variable y otra con la frecuencia de cada opcion para cada pais
 
-dfImpuestos_transposeFormato1<-gather(dfImpuestos_transposeFormato,"variable","Frequency",-1)
+
+#Se grafica la información de interes
+
 ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países con más presencia fisica y digital de EMN") +  
   theme (plot.title = element_text(family="Comic Sans MS",
                                    size=rel(1.5), 
@@ -124,8 +153,14 @@ ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=vari
                                    lineheight=1.5))+ xlab("País")+ylab("Número de empresas")
 
 
+
 ####¿Qué países tienen más presencia física de EMN?####
 #Primero se lee el archivo qué contiene la información del mapamundi
+
+#¿Qué países tienen más presencia física de EMN?
+#EN UN MAPAMUNDI:
+
+
 world.map <- readOGR(dsn="C:/Users/adiez/Desktop/Business Intelligence/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO CAMBIANDO \ POR /
 world.ggmap <- fortify(world.map, region = "ISO2")
 head(world.map@data)
@@ -150,8 +185,12 @@ world.plot <- ggplot(data = world.ggmape, aes(x = long, y = lat, group = group))
                                    lineheight=1.5)) 
 world.plot
 
+
 ####¿Qué países tienen más presencia digital de EMN? ####
 #Se realiza lo mismo, pero cogiendo la variable Total Digital
+
+#¿Qué países tienen más presencia digital de EMN? 
+
 tcp2<-dfImpuestos1_transpose[,c(1,503)]
 names(tcp2)<-c("id","TotalDigital")
 tcp2$id<-tolower(tcp2$id)
@@ -172,8 +211,11 @@ world.plot2
 
 
 
+
 ####¿Cómo ha afectado el COVID-19 a 10 de las EMN?####
 #Primero se lee la base de datos
+
+#¿Cómo ha afectado el COVID-19 a 10 de las EMN?
 
 dfTrends <- read.table(file = "OECD-ADIMA-500-Google-trends-monitor.txt", header = FALSE, sep = "\t", dec =",")
 dfTrends$V1 <- as.character(dfTrends$V1)
@@ -282,6 +324,8 @@ TOT2
 ####¿Cómo difiere la tendencia de interés 2019 vs 2020 de estas 10 EMN? ####
 
 #Se va a hacer lo mismo para las 10 empresas
+
+#¿Cómo difiere la tendencia de interés 2019 vs 2020 de estas 10 EMN?
 
 #AIRBUS, 2019 vs. 2020
 
@@ -551,23 +595,34 @@ WALMART
 
 #¿Qué temas o sectores preocupan o interesan más dentro de cada una de estas 10 EMN?
 
+####¿Qué temas o sectores preocupan o interesan más dentro de cada una de estas 10 EMN?####
+
+#Se lee la base de datos
 dfIndex <- read.table("OECD-ADIMA-500-IndexConstituyents.txt", sep="\t", dec=",", quote = "\"'",
                            header=TRUE, skip = 0, na.strings = "NA")
-
+#Se eliminan las columnas que no son de interes
 dfIndex <- dfIndex[,c(1,4,8)]
+
+#Se explican los pasos seguidos para una de las empresas puesto que todas las demás se realizan de la misma manera
 
 #DENTRO DE AIRBUS
 
+#Se crea un dataframe con los datos de la emoresa en cuestión
 dfIndexAirbus<- dfIndex[dfIndex$Parent.MNE=="Airbus SE",]
 
+#Se añade una columna con el porcentaje de peso del tema redondeado y se ordena de mayor a menor el data frame
 dfIndexAirbus$percent <- floor(dfIndexAirbus$Weight)
 dfIndexAirbus <- dfIndexAirbus[order(desc(dfIndexAirbus$Weight-dfIndexAirbus$percent)),]
 dfIndexAirbus$percent <- dfIndexAirbus$percent + ifelse(1:nrow(dfIndexAirbus)>100-sum(dfIndexAirbus$percent),0,1) 
 dfIndexAirbus <- dfIndexAirbus[order(desc(dfIndexAirbus$percent)),]
 
+#Se crea un dataframe que contiene la matriz 10x10 donde se representaran los datos de interes y su peso
 df <- expand.grid(x=1:10,y=1:10)
+
+#se añade una columna al data frame de la matriz donde se repiten los temas, tantas veces como cuadrados de la matriz ocupen en función de su porcentaje respecto del total de temas
 df$WikiTopic <- rep(dfIndexAirbus$WikiTopic, dfIndexAirbus$percent)
 
+#Se grafica la información de interes
 ggplot(df,aes(x=x,y=y,fill=WikiTopic))+
   geom_tile(color = "black", size = 0.5) +
   scale_x_continuous(expand = c(0, 0)) +
@@ -826,19 +881,20 @@ ggplot(df9,aes(x=x,y=y,fill=WikiTopic))+
                                    color="grey", 
                                    lineheight=1.5)) 
 
-
 #¿Las empresas con un interés creciente tienen más presencia internacional?
 
-#Indice de internacionalidad de las empresas seleccionadas en GoogleTrends
+####¿Las empresas con un interés creciente tienen más presencia internacional?####
 
+#Indice de internacionalidad de las empresas seleccionadas en GoogleTrends
+#Se lee la base de datos
 dfInternacionalidad<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
                           header=TRUE, skip = 0, na.strings = "NA")
 
+#Se seleccionan las filas correspondientes a las 10 EMN de estudio
 dfInternacionalidad1 <- dfInternacionalidad[c(18,29,42,62,186,198,207,225,228,484),]
-
 str(dfInternacionalidad1)
 
-
+#Se grafica la información deseada
 ggplot(data=dfInternacionalidad1, aes(x=Parent.MNE, y=International.Share, fill=Parent.MNE)) + 
   geom_bar(stat="identity", position="dodge") + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("Indice de internacionalidad") +  
   theme (plot.title = element_text(family="Comic Sans MS",
