@@ -58,12 +58,8 @@ if(!require("maptools")) {
 }
 
 
-#¿Dónde se encuentran las sedes principales de las EMN?
-
-#Se lee la base de datos y se realiza el gráfico con la columna de las sedes de cada empresa
-
 ####¿Dónde se encuentran las sedes principales de las EMN?####
-
+#Se lee la base de datos y se realiza el gráfico con la columna de las sedes de cada empresa
 
 dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
                           header=TRUE, skip = 0, na.strings = "NA")
@@ -77,7 +73,6 @@ ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar() + theme(axi
                                    lineheight=1.5)) +
   xlab("País")+ylab("Número de empresas")
 
-#¿Cuáles son los 35 países donde hay más EMN que pagan impuestos?
 
 ####¿Cuáles son los 35 países donde hay más EMN que pagan impuestos?####
 
@@ -117,9 +112,6 @@ ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill
                                    color="grey", 
                                    lineheight=1.5)) +xlab("País")+ylab("Número de empresas")
 
-#¿Cuáles son los 35 países donde se encuentran más EMN y en que registro, físico o digital?
-
-
 #Se grafica la información de interes
 ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países donde hay más EMN que pagan impuestos") +  
   theme (plot.title = element_text(family="Comic Sans MS",
@@ -157,10 +149,6 @@ ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=vari
 ####¿Qué países tienen más presencia física de EMN?####
 #Primero se lee el archivo qué contiene la información del mapamundi
 
-#¿Qué países tienen más presencia física de EMN?
-#EN UN MAPAMUNDI:
-
-
 world.map <- readOGR(dsn="C:/Users/adiez/Desktop/Business Intelligence/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO CAMBIANDO \ POR /
 world.ggmap <- fortify(world.map, region = "ISO2")
 head(world.map@data)
@@ -189,8 +177,6 @@ world.plot
 ####¿Qué países tienen más presencia digital de EMN? ####
 #Se realiza lo mismo, pero cogiendo la variable Total Digital
 
-#¿Qué países tienen más presencia digital de EMN? 
-
 tcp2<-dfImpuestos1_transpose[,c(1,503)]
 names(tcp2)<-c("id","TotalDigital")
 tcp2$id<-tolower(tcp2$id)
@@ -214,8 +200,6 @@ world.plot2
 
 ####¿Cómo ha afectado el COVID-19 a 10 de las EMN?####
 #Primero se lee la base de datos
-
-#¿Cómo ha afectado el COVID-19 a 10 de las EMN?
 
 dfTrends <- read.table(file = "OECD-ADIMA-500-Google-trends-monitor.txt", header = FALSE, sep = "\t", dec =",")
 dfTrends$V1 <- as.character(dfTrends$V1)
@@ -277,14 +261,6 @@ f10<-ggplot(dfTrends1_transpose, aes(Date, `Walmart Inc` )) + scale_colour_ident
   theme_minimal()+labs(x="Date", y="Index Walmart")
 f10
 
-ftot<-ggplot(dfTrends1_transpose, aes(Date, `Airbus SE` )) + scale_colour_identity()+geom_line(color="blue")+
-  theme_minimal()+geom_line(aes(Date, `Amazon.com Inc`),color="red")+
-  geom_line(aes(Date, `Apple Inc`),color="green")+
-  geom_line(aes(Date, `Banco Santander SA`),color="orange")+
-  geom_line(aes(Date, `Enel SpA`),color="grey")+labs(x="Date", y="Index")
-ftot #no se entiende nada
-
-
 pal <- colorRampPalette(c("#488f31","#9dc6e0","#a5c796","#f89a5f","#de425b"))
 #se ha cargado paleta de colores
 
@@ -324,8 +300,6 @@ TOT2
 ####¿Cómo difiere la tendencia de interés 2019 vs 2020 de estas 10 EMN? ####
 
 #Se va a hacer lo mismo para las 10 empresas
-
-#¿Cómo difiere la tendencia de interés 2019 vs 2020 de estas 10 EMN?
 
 #AIRBUS, 2019 vs. 2020
 
@@ -592,8 +566,6 @@ WALMART<-ggplot(data=dfWalmart,aes(x=Date))+
                                    color="grey", 
                                    lineheight=1.5)) 
 WALMART
-
-#¿Qué temas o sectores preocupan o interesan más dentro de cada una de estas 10 EMN?
 
 ####¿Qué temas o sectores preocupan o interesan más dentro de cada una de estas 10 EMN?####
 
@@ -880,8 +852,6 @@ ggplot(df9,aes(x=x,y=y,fill=WikiTopic))+
                                    face="bold", 
                                    color="grey", 
                                    lineheight=1.5)) 
-
-#¿Las empresas con un interés creciente tienen más presencia internacional?
 
 ####¿Las empresas con un interés creciente tienen más presencia internacional?####
 
