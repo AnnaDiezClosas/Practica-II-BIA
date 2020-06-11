@@ -540,25 +540,34 @@ WALMART<-ggplot(data=dfWalmart,aes(x=Date))+
                                    lineheight=1.5)) 
 WALMART
 
-#¿Qué temas o sectores preocupan o interesan más dentro de cada una de estas 10 EMN?
+####¿Qué temas o sectores preocupan o interesan más dentro de cada una de estas 10 EMN?####
 
+#Se lee la base de datos
 dfIndex <- read.table("OECD-ADIMA-500-IndexConstituyents.txt", sep="\t", dec=",", quote = "\"'",
                            header=TRUE, skip = 0, na.strings = "NA")
-
+#Se eliminan las columnas que no son de interes
 dfIndex <- dfIndex[,c(1,4,8)]
+
+#Se explican los pasos seguidos para una de las empresas puesto que todas las demás se realizan de la misma manera
 
 #DENTRO DE AIRBUS
 
+#Se crea un dataframe con los datos de la emoresa en cuestión
 dfIndexAirbus<- dfIndex[dfIndex$Parent.MNE=="Airbus SE",]
 
+#Se añade una columna con el porcentaje de peso del tema redondeado y se ordena de mayor a menor el data frame
 dfIndexAirbus$percent <- floor(dfIndexAirbus$Weight)
 dfIndexAirbus <- dfIndexAirbus[order(desc(dfIndexAirbus$Weight-dfIndexAirbus$percent)),]
 dfIndexAirbus$percent <- dfIndexAirbus$percent + ifelse(1:nrow(dfIndexAirbus)>100-sum(dfIndexAirbus$percent),0,1) 
 dfIndexAirbus <- dfIndexAirbus[order(desc(dfIndexAirbus$percent)),]
 
+#Se crea un dataframe que contiene la matriz 10x10 donde se representaran los datos de interes y su peso
 df <- expand.grid(x=1:10,y=1:10)
+
+#se añade una columna al data frame de la matriz donde se repiten los temas, tantas veces como cuadrados de la matriz ocupen en función de su porcentaje respecto del total de temas
 df$WikiTopic <- rep(dfIndexAirbus$WikiTopic, dfIndexAirbus$percent)
 
+#Se grafica la información de interes
 ggplot(df,aes(x=x,y=y,fill=WikiTopic))+
   geom_tile(color = "black", size = 0.5) +
   scale_x_continuous(expand = c(0, 0)) +
