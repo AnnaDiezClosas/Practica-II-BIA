@@ -1,6 +1,5 @@
 #proyecto
 
-
 if(!require("ggplot2")) {
   install.packages("ggplot2")
   library("ggplot2")
@@ -33,19 +32,54 @@ if(!require("rgdal")) {
   library("rgdal")
 }
 
-#¿Dónde están las empresas multinacionales?
+if(!require("sp")) {
+  install.packages("sp")
+  library("sp")
+}
+
+if(!require("maps")) {
+  install.packages("maps")
+  library("maps")
+}
+
+if(!require("rgeos")) {
+  install.packages("rgeos")
+  library("rgeos")
+}
+
+if(!require("gpclib")) {
+  install.packages("gpclib")
+  library("gpclib")
+}
+
+if(!require("maptools")) {
+  install.packages("maptools")
+  library("maptools")
+}
+
+
+#¿Dónde se encuentran las sedes principales de las EMN?
+
+#Se lee la base de datos y se realiza el gráfico con la columna de las sedes de cada empresa
 
 dfIndicators<- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",", quote = "\"'",
                           header=TRUE, skip = 0, na.strings = "NA")
-str(dfIndicators)
-ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar()
 
-#¿Cuales son los 35 países en donde pagan mas impuestos las empresas?#
+ggplot(dfIndicators, aes(x=Headquarters.of.Parent.MNE)) + geom_bar() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5)) + ggtitle ("¿Dónde se encuentran las sedes principales de las EMN?") +  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1.5, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) +
+  xlab("País")+ylab("Número de empresas")
+
+#¿Cuáles son los 35 países donde hay más EMN que pagan impuestos?
 
 dfImpuestos <- read.table("OECD-ADIMA-Indicators.txt", sep="\t", dec=",",
                           header=FALSE)
 
-dfImpuestos1 <- dfImpuestos[,-2:-3:-4:-5:-6:-7:-8:-9:-10:-11]
+dfImpuestos1 <- dfImpuestos[,-(2:11)]
 
 dfImpuestos1[,-1]<-apply(dfImpuestos1[,-1],2,as.character)
 
@@ -63,9 +97,15 @@ dfImpuestos_transposeSimplificada <- dfImpuestos1_transpose[1:35,c(1,502,503)]
 
 
 dfImpuestos_transposeSimplificada1<-gather(dfImpuestos_transposeSimplificada,"variable","Frequency",-1)
-ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
+ggplot(dfImpuestos_transposeSimplificada1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países donde hay más EMN que pagan impuestos") +  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) +xlab("País")+ylab("Número de empresas")
 
-#En que 35 paises se encuentran mas multinacioneles y en que formato (fisico o digital)
+#¿Cuáles son los 35 países donde se encuentran más EMN y en que registro, físico o digital?
 
 dfImpuestos1_transpose$TotalDigital=rowSums(dfImpuestos1_transpose[-1]=="Digital")
 
@@ -75,36 +115,43 @@ dfImpuestos_transposeFormato <- dfImpuestos1_transpose[1:35,c(1,504,505)]
 
 
 dfImpuestos_transposeFormato1<-gather(dfImpuestos_transposeFormato,"variable","Frequency",-1)
-ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey()
+ggplot(dfImpuestos_transposeFormato1)+geom_bar(aes(x=País,y=Frequency,fill=variable),stat='identity') + scale_fill_grey() + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("35 países con más presencia fisica y digital de EMN") +  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5))+ xlab("País")+ylab("Número de empresas")
 
-#EN UN MAPAMUNDI:
 
-install.packages("sp")
-install.packages("maps")
-install.packages("rgeos")
-install.packages("ggplot2")
-install.packages("rgdal")
-install.packages("gpclib")
-install.packages("maptools")
-install.packages("rgdal")
-
-world.map <- readOGR(dsn="C:/Users/Usuari/Desktop/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO
+####¿Qué países tienen más presencia física de EMN?####
+#Primero se lee el archivo qué contiene la información del mapamundi
+world.map <- readOGR(dsn="C:/Users/adiez/Desktop/Business Intelligence/Practica-II-BIA",layer="TM_WORLD_BORDERS-0.3") #SE TIENE QUE PONER CARPETA DONDE ESTÁ GUARDADO EL ARCHIVO CAMBIANDO \ POR /
 world.ggmap <- fortify(world.map, region = "ISO2")
 head(world.map@data)
 
-tcp<-dfImpuestos1_transpose[,c(1,502)]
+#A continuación se pretende vincular las iniciales de los países de nuestra base
+#de datos para hacer un merge con las siglas guardadas en el archivo leído anterior
+tcp<-dfImpuestos1_transpose[,c(1,502)] #aquí se coge la columna que corresponde al contaje de Annual Reports en cada país
 
-names(tcp)<-c("id","PresenciaTotalFisica")
+names(tcp)<-c("id","PresenciaTotalFisica") 
 tcp$id<-tolower(tcp$id)
-world.ggmap$id<-tolower(world.ggmap$id)
+world.ggmap$id<-tolower(world.ggmap$id) 
 
 world.ggmape <- merge(world.ggmap, tcp, by = "id", all = TRUE)
 world.ggmape <- world.ggmape[order(world.ggmape$order), ]
 
-world.plot <- ggplot(data = world.ggmape, aes(x = long, y = lat, group = group))+ geom_polygon(aes(fill =PresenciaTotalFisica), stat='identity')+ geom_path(aes(x=long, y=lat, group=group), color="gray")
+world.plot <- ggplot(data = world.ggmape, aes(x = long, y = lat, group = group))+ geom_polygon(aes(fill =PresenciaTotalFisica), stat='identity')+ geom_path(aes(x=long, y=lat, group=group), color="gray")+ theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("¿Qué países tienen más presencia física de EMN?") +  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 world.plot
 
-#¿En qué países se tiene más presencia digital? 
+####¿Qué países tienen más presencia digital de EMN? ####
+#Se realiza lo mismo, pero cogiendo la variable Total Digital
 tcp2<-dfImpuestos1_transpose[,c(1,503)]
 names(tcp2)<-c("id","TotalDigital")
 tcp2$id<-tolower(tcp2$id)
@@ -113,27 +160,34 @@ world.ggmap$id<-tolower(world.ggmap$id)
 world.ggmape2 <- merge(world.ggmap, tcp2, by = "id", all = TRUE)
 world.ggmape2 <- world.ggmape2[order(world.ggmape2$order), ]
 
-world.plot2 <- ggplot(data = world.ggmape2, aes(x = long, y = lat, group = group))+ geom_polygon(aes(fill =TotalDigital), stat='identity')+ geom_path(aes(x=long, y=lat, group=group), color="gray")
+world.plot2 <- ggplot(data = world.ggmape2, aes(x = long, y = lat, group = group))+ geom_polygon(aes(fill =TotalDigital), stat='identity')+ geom_path(aes(x=long, y=lat, group=group), color="gray")+ ggtitle ("¿Qué países tienen más presencia digital de EMN?") +  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
+
 world.plot2
 
 
 
-#¿Cómo ha afectado COVID a las multinacionales?
+####¿Cómo ha afectado el COVID-19 a 10 de las EMN?####
+#Primero se lee la base de datos
 
 dfTrends <- read.table(file = "OECD-ADIMA-500-Google-trends-monitor.txt", header = FALSE, sep = "\t", dec =",")
-str(dfTrends)
 dfTrends$V1 <- as.character(dfTrends$V1)
-
-names(dfTrends)[2:76] <- format(as.Date(names(dfTrends)[2:76], format = "X%d.%m.%Y"), format = "%Y-%m-%d")
 
 dfTrends1 <- dfTrends[c(1,17,26,39,57,168,178,202,205,187,441),] #ahora todas filas y solo columnas de las empresas que queremos analizar
 
-dfTrends1_transpose <- data.frame(t(dfTrends1[-1]))
+dfTrends1_transpose <- data.frame(t(dfTrends1[-1])) #se hace la transpuesta para después crear una variable (columna de las fechas)
 colnames(dfTrends1_transpose) <- dfTrends1[, 1]
 
 names (dfTrends1_transpose)[1] = "Date"
 rownames(dfTrends1_transpose)<-1:75
 
+#A continuación se transforman los datos correspondientes a los índices
+#de char -> num
 dfTrends1_transpose$`Airbus SE` <- as.numeric(sub(",",".",dfTrends1_transpose$`Airbus SE`,fixed=TRUE))
 dfTrends1_transpose$`Amazon.com Inc` <- as.numeric(sub(",",".",dfTrends1_transpose$`Amazon.com Inc`,fixed=TRUE))
 dfTrends1_transpose$`Apple Inc` <- as.numeric(sub(",",".",dfTrends1_transpose$`Apple Inc`,fixed=TRUE))
@@ -145,9 +199,11 @@ dfTrends1_transpose$`Heineken NV` <- as.numeric(sub(",",".",dfTrends1_transpose$
 dfTrends1_transpose$`Ford Motor Co` <- as.numeric(sub(",",".",dfTrends1_transpose$`Ford Motor Co`,fixed=TRUE))
 dfTrends1_transpose$`Walmart Inc` <- as.numeric(sub(",",".",dfTrends1_transpose$`Walmart Inc`,fixed=TRUE))
 
+#Aquí, se modifica el formato de las fechas, a formato Date
 
 dfTrends1_transpose$Date <-as.Date(dfTrends1_transpose$Date, format = "%d/%m/%Y")
 
+#A continuación, se muestran los gráficos para cada empresa durante todo el periodo
 f1<-ggplot(dfTrends1_transpose, aes(Date, `Airbus SE` )) + scale_colour_identity()+geom_line(color="blue")+
   theme_minimal()+labs(x="Date", y="Index Airbus")
 f1
@@ -186,17 +242,27 @@ ftot<-ggplot(dfTrends1_transpose, aes(Date, `Airbus SE` )) + scale_colour_identi
   geom_line(aes(Date, `Enel SpA`),color="grey")+labs(x="Date", y="Index")
 ftot #no se entiende nada
 
-pal <- colorRampPalette(c("#488f31","#9dc6e0","#a5c796","#f89a5f","#de425b"))
 
+pal <- colorRampPalette(c("#488f31","#9dc6e0","#a5c796","#f89a5f","#de425b"))
+#se ha cargado paleta de colores
+
+#a continuación, se crea el primer gráfico de 5 empresas
 TOT1<-ggplot(data=dfTrends1_transpose,aes(x=Date))+geom_line(aes(y=`Airbus SE`,colour="Airbus SE"))+
   geom_line(aes(y=`Amazon.com Inc`,colour="Amazon.com Inc"))+
   geom_line(aes(y=`Apple Inc`,colour="Apple Inc"))+
   geom_line(aes(y=`Banco Santander SA`,colour="Banco Santander SA"))+
   geom_line(aes(y=`Enel SpA`,colour="Enel SpA"))+
     scale_colour_manual("", breaks=c("Airbus SE","Amazon.com Inc", "Apple Inc","Banco Santander SA","Enel SpA"), values=c("red","blue","green","orange","grey"))+
-  xlab("Date")+ylab("Index")
+  xlab("Date")+ylab("Index") + ggtitle ("Tendencía del interes de las EMN") +  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(2), 
+                                   vjust=2, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 TOT1
 
+#gráfico de las otras 5 empresas
 TOT2<-ggplot(data=dfTrends1_transpose,aes(x=Date))+
     geom_line(aes(y=`Facebook Inc`,colour="Facebook Inc"))+
   geom_line(aes(y=`HP Inc`,colour="HP Inc"))+
@@ -204,28 +270,48 @@ TOT2<-ggplot(data=dfTrends1_transpose,aes(x=Date))+
   geom_line(aes(y=`Ford Motor Co`,colour="Ford Motor Co"))+
   geom_line(aes(y=`Walmart Inc`,colour="Walmart Inc"))+
   scale_colour_manual("", breaks=c("Facebook Inc","HP Inc","Heineken NV","Ford Motor Co","Walmart Inc"), values=c("red","blue","green","orange","grey"))+
-  xlab("Date")+ylab("Index")
+  xlab("Date")+ylab("Index")+ ggtitle ("Tendencía del interes de las EMN") +  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(2), 
+                                   vjust=2, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5))
 TOT2
+
+####¿Cómo difiere la tendencia de interés 2019 vs 2020 de estas 10 EMN? ####
+
+#Se va a hacer lo mismo para las 10 empresas
 
 #AIRBUS, 2019 vs. 2020
 
+#se seleccionan las variables Date y la correspondiente a la empresa
 dfAirbus <- dfTrends1_transpose[,c("Date","Airbus SE")]
 names (dfAirbus)[2] = "Index"
+
+#primero se eliminan los datos correspondientes a 2018
 dfAirbus<-dfAirbus[-(1:5),]
 
 dfAirbus2 <- dfAirbus
 
-dfAirbus<-dfAirbus[1:18,]
-dfAirbus2<-dfAirbus2[53:70,]
+dfAirbus<-dfAirbus[1:18,] #dataframe con fechas 2019
+dfAirbus2<-dfAirbus2[53:70,] #dataframe con fechas 2020
 
-dfAirbus$'Index 2020' <- dfAirbus2$Index
+dfAirbus$'Index 2020' <- dfAirbus2$Index # se introduce en el data frame de 2019 las fechas e índices de 2020
+#las fechas corresponden al inicio de cada semana del año
 names (dfAirbus)[2] = "Index 2019"
 
 AIRBUS<-ggplot(data=dfAirbus,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-  ylab("Index")+ggtitle ("AIRBUS")
+  ylab("Index")+ggtitle ("AIRBUS")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 AIRBUS
 
 #AMAZON, 2019 vs. 2020
@@ -246,7 +332,13 @@ AMAZON<-ggplot(data=dfAmazon,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-  ylab("Index")+ggtitle ("AMAZON")
+  ylab("Index")+ggtitle ("AMAZON")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 AMAZON
 
 #APPLE, 2019 vs. 2020
@@ -266,7 +358,13 @@ APPLE<-ggplot(data=dfApple,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-  ylab("Index")+ggtitle ("APPLE")
+  ylab("Index")+ggtitle ("APPLE")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 APPLE
 
 #BANCO SANTANDER, 2019 vs. 2020
@@ -286,7 +384,13 @@ SANTANDER<-ggplot(data=dfSantander,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-  ylab("Index")+ggtitle ("BANCO SANTANDER")
+  ylab("Index")+ggtitle ("BANCO SANTANDER")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 SANTANDER
 
 #ENEL, 2019 vs. 2020
@@ -306,7 +410,13 @@ ENEL<-ggplot(data=dfEnel,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-  ylab("Index")+ggtitle ("ENEL")
+  ylab("Index")+ggtitle ("ENEL")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 ENEL
 
 #FACEBOOK, 2019 vs. 2020
@@ -326,7 +436,13 @@ FACEBOOK<-ggplot(data=dfFacebook,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-  ylab("Index")+ggtitle ("FACEBOOK")
+  ylab("Index")+ggtitle ("FACEBOOK")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 FACEBOOK
 
 #HP, 2019 vs. 2020
@@ -346,7 +462,13 @@ HP<-ggplot(data=dfHP,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-  ylab("Index")+ggtitle ("HP")
+  ylab("Index")+ggtitle ("HP")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 HP
 
 #HEINEKEN, 2019 vs. 2020
@@ -366,7 +488,13 @@ HEINEKEN<-ggplot(data=dfHeineken,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-  ylab("Index")+ggtitle ("HEINEKEN")
+  ylab("Index")+ggtitle ("HEINEKEN")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 HEINEKEN
 
 #FORD, 2019 vs. 2020
@@ -386,7 +514,13 @@ FORD<-ggplot(data=dfFord,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-  ylab("Index")+ggtitle ("FORD")
+  ylab("Index")+ggtitle ("FORD")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 FORD
 
 #WALMART, 2019 vs. 2020
@@ -406,14 +540,20 @@ WALMART<-ggplot(data=dfWalmart,aes(x=Date))+
   geom_line(aes(y=`Index 2019`,colour="Index 2019"))+
   geom_line(aes(y=`Index 2020`,colour="Index 2020"))+
   scale_colour_manual("", breaks=c("Index 2019","Index 2020"), values=c("red","blue"))+
-  ylab("Index")+ggtitle ("WALMART")
+  ylab("Index")+ggtitle ("WALMART")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 WALMART
 
-#¿Qué temas o sectores preocupan más dentro de cada EMN? 
+#¿Qué temas o sectores preocupan o interesan más dentro de cada una de estas 10 EMN?
 
 dfIndex <- read.table("OECD-ADIMA-500-IndexConstituyents.txt", sep="\t", dec=",", quote = "\"'",
                            header=TRUE, skip = 0, na.strings = "NA")
-str(dfIndex)
+
 dfIndex <- dfIndex[,c(1,4,8)]
 
 #DENTRO DE AIRBUS
@@ -435,7 +575,13 @@ ggplot(df,aes(x=x,y=y,fill=WikiTopic))+
   coord_equal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+ggtitle ("AIRBUS")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 
 #DENTRO DE AMAZON
 
@@ -456,7 +602,13 @@ ggplot(df1,aes(x=x,y=y,fill=WikiTopic))+
   coord_equal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+ggtitle ("AMAZON")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5))  
 
 #DENTRO DE APPLE
 
@@ -477,7 +629,13 @@ ggplot(df2,aes(x=x,y=y,fill=WikiTopic))+
   coord_equal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+ggtitle ("APPLE")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 
 #DENTRO DE BANCO SANTANDER
 
@@ -498,7 +656,13 @@ ggplot(df3,aes(x=x,y=y,fill=WikiTopic))+
   coord_equal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+ggtitle ("BANCO SANTANDER")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 
 #DENTRO ENEL
 
@@ -519,7 +683,13 @@ ggplot(df4,aes(x=x,y=y,fill=WikiTopic))+
   coord_equal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+ggtitle ("ENEL")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 
 #DENTRO FACEBOOK
 
@@ -540,7 +710,13 @@ ggplot(df5,aes(x=x,y=y,fill=WikiTopic))+
   coord_equal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+ggtitle ("FACEBOOK")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5))
 
 #DENTRO HP
 
@@ -561,7 +737,13 @@ ggplot(df6,aes(x=x,y=y,fill=WikiTopic))+
   coord_equal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+ggtitle ("HP")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 
 #DENTRO HEINEKEN
 
@@ -582,7 +764,13 @@ ggplot(df7,aes(x=x,y=y,fill=WikiTopic))+
   coord_equal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+ggtitle ("HEINEKEN")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
 
 #DENTRO FORD
 
@@ -603,7 +791,13 @@ ggplot(df8,aes(x=x,y=y,fill=WikiTopic))+
   coord_equal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+ggtitle ("FORD")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5))
 
 #DENTRO WALMART
 
@@ -624,7 +818,16 @@ ggplot(df9,aes(x=x,y=y,fill=WikiTopic))+
   coord_equal() +
   theme(axis.text = element_blank(),
         axis.title = element_blank(),
-        axis.ticks = element_blank())
+        axis.ticks = element_blank())+ggtitle ("WALMART")+  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) 
+
+
+#¿Las empresas con un interés creciente tienen más presencia internacional?
 
 #Indice de internacionalidad de las empresas seleccionadas en GoogleTrends
 
@@ -637,4 +840,10 @@ str(dfInternacionalidad1)
 
 
 ggplot(data=dfInternacionalidad1, aes(x=Parent.MNE, y=International.Share, fill=Parent.MNE)) + 
-  geom_bar(stat="identity", position="dodge")
+  geom_bar(stat="identity", position="dodge") + theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+ ggtitle ("Indice de internacionalidad") +  
+  theme (plot.title = element_text(family="Comic Sans MS",
+                                   size=rel(1.5), 
+                                   vjust=1, 
+                                   face="bold", 
+                                   color="grey", 
+                                   lineheight=1.5)) + xlab("MNE")+ylab("International Share")
