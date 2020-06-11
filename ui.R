@@ -1,5 +1,8 @@
 library(markdown)
 
+#UTILIZAMOS NAVBARPAGE PARA TENER DIFERENTES PESTAÑAS
+
+#DENTRO DE CADA PESTAÑA, APARECERÁ UN TABPANEL Y SIDEBARPANEL DIFERENTE CON EL MISMO LAYOUT
 shinyUI(navbarPage("EMN Worldwide",
   tabPanel("Interest 2019-2020",
     sidebarLayout(
@@ -16,9 +19,7 @@ shinyUI(navbarPage("EMN Worldwide",
   tabPanel("Taxes",
     sidebarLayout(
       sidebarPanel(
-        selectInput("Plot", "Select a Plot:", 
-                    choices = c("Bar Plot")
-               )
+        numericInput("bins",label= "Select the number of countries on which multinationals pay more taxes:", value=35, min=1)
              ),
              mainPanel(
                plotOutput("TaxPlot")
