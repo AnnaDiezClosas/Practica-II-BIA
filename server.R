@@ -9,7 +9,7 @@ shinyServer(function(input, output) {
     
     EMNselected <- input$EMN
     
-    # draw the line diagram
+    # leemos datos (sigue la misma estructura que cuando generamos grafico en el CODIGO)
     dfTrends <- read.table(file = "OECD-ADIMA-500-Google-trends-monitor.txt", header = FALSE, sep = "\t", dec =",")
     dfTrends$V1 <- as.character(dfTrends$V1)
     
@@ -35,6 +35,8 @@ shinyServer(function(input, output) {
     dfTrends1_transpose$`Walmart Inc` <- as.numeric(sub(",",".",dfTrends1_transpose$`Walmart Inc`,fixed=TRUE))
     
     dfTrends1_transpose$Date <-as.Date(dfTrends1_transpose$Date, format = "%d/%m/%Y")
+    
+    #SALDRÁ EL GRAFICO CORRESPONDIENTE A LA EMPRESA EN FUNCIÓN DE LA EMPRESA QUE SE SELECCIONE
     
     if (EMNselected=="Airbus SE"){
       
@@ -296,6 +298,7 @@ shinyServer(function(input, output) {
     
   }) 
 
+  #GRAFICO DE BARRAS EN FUNCIÓN DEL NÚMERO DE PAÍSES QUE SE QUIERAN VISUALIZAR
   output$TaxPlot <- renderPlot({
    
     nbins <- input$bins
@@ -331,12 +334,6 @@ shinyServer(function(input, output) {
                                          color="grey", 
                                          lineheight=1.5)) +xlab("País")+ylab("Número de empresas")
       
-
-    
-    
   })
 
-  #output$table <- DT::renderDataTable({
-   # DT::datatable(cars)
-  #})
 })
